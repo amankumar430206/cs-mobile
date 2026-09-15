@@ -1,18 +1,34 @@
-import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { useCallback, useState } from "react";
+import { StyleSheet } from "react-native";
+import { router, useFocusEffect } from "expo-router";
+import { setStatusBarStyle } from "expo-status-bar";
 import { useQueryClient } from "@tanstack/react-query";
-import { useMeQuery } from "@castadi/shared/hooks";
+import { useMeQuery, useUnreadCountQuery } from "@castadi/shared/hooks";
 import { spacing } from "@castadi/shared/tokens";
 import { RecentNotifications } from "@/features/notifications/RecentNotifications";
-import { formatToday, greeting } from "@/lib/format";
-import { Screen, Text } from "@/ui";
+import { useTheme } from "@/theme/ThemeProvider";
+import { Screen } from "@/ui";
 import { AdvertiserHome } from "./AdvertiserHome";
+import { DashboardHeader } from "./DashboardHeader";
 import { PartnerHome } from "./PartnerHome";
+
+const GUTTER = spacing(5);
 
 export function HomeScreen() {
   const { data: user } = useMeQuery();
+  // Same query the tab badge polls, so this adds no extra requests.
+  const { data: unread } = useUnreadCountQuery();
   const queryClient = useQueryClient();
+  const { mode } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
+
+  // The header band is dark in both themes, so the status bar needs light content while Home is focused.
+  useFocusEffect(
+    useCallback(() => {
+      setStatusBarStyle("light");
+      return () => setStatusBarStyle(mode === "dark" ? "light" : "dark");
+    }, [mode])
+  );
 
   const refresh = async () => {
     setRefreshing(true);
@@ -26,19 +42,11 @@ export function HomeScreen() {
   if (!user) return null;
 
   const isAdvertiser = user.role === "ADVERTISER";
-  const subtitle = isAdvertiser ? (user.advertiser?.business_name ?? "Advertiser") : "Screen Partner";
+  const openNotifications = () => router.navigate(isAdvertiser ? "/advertiser/notifications" : "/partner/notifications");
 
   return (
-    <Screen edges={["top"]} onRefresh={refresh} refreshing={refreshing} contentStyle={styles.content}>
-      <View style={styles.header}>
-        <Text variant="caption" tone="muted">
-          {formatToday()}
-        </Text>
-        <Text variant="title" accessibilityRole="header">
-          {greeting()}, {user.full_name.split(" ")[0]}
-        </Text>
-        <Text tone="muted">{subtitle}</Text>
-      </View>
+    <Screen edges={[]} onRefresh={refresh} refreshing={refreshing} contentStyle={styles.content}>
+      <DashboardHeader user={user} unreadCount={unread?.count ?? 0} onOpenNotifications={openNotifications} bleed={GUTTER} />
 
       {isAdvertiser ? <AdvertiserHome user={user} /> : <PartnerHome user={user} />}
 
@@ -48,6 +56,5 @@ export function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing(6) },
-  header: { gap: spacing(1) },
+  content: { paddingTop: 0, paddingHorizontal: GUTTER, gap: spacing(5), paddingBottom: spacing(8) },
 });

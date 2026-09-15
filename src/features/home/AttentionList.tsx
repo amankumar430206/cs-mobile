@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { radii, spacing } from "@castadi/shared/tokens";
 import { useTheme } from "@/theme/ThemeProvider";
-import { Text } from "@/ui";
+import { Icon, Text } from "@/ui";
 import type { AttentionItem } from "./attentionItems";
 
 export function AttentionList({ items }: { items: AttentionItem[] }) {
@@ -14,14 +14,20 @@ export function AttentionList({ items }: { items: AttentionItem[] }) {
         <View
           key={item.key}
           accessible
-          style={[styles.item, { backgroundColor: `${colors.warning}14`, borderColor: `${colors.warning}55` }]}
+          accessibilityRole="alert"
+          style={[styles.item, { backgroundColor: `${colors.warning}14`, borderColor: `${colors.warning}4D` }]}
         >
-          <Text variant="label" weight="semibold" style={{ color: colors.warning }}>
-            {item.title}
-          </Text>
-          <Text variant="caption" tone="muted">
-            {item.description}
-          </Text>
+          <View style={[styles.iconWrap, { backgroundColor: `${colors.warning}24` }]}>
+            <Icon name="warning" size={16} color={colors.warning} />
+          </View>
+          <View style={styles.body}>
+            <Text variant="label" weight="semibold">
+              {item.title}
+            </Text>
+            <Text variant="caption" tone="muted">
+              {item.description}
+            </Text>
+          </View>
         </View>
       ))}
     </View>
@@ -30,5 +36,7 @@ export function AttentionList({ items }: { items: AttentionItem[] }) {
 
 const styles = StyleSheet.create({
   list: { gap: spacing(2) },
-  item: { borderWidth: 1, borderRadius: radii.md, padding: spacing(3), gap: spacing(1) },
+  item: { flexDirection: "row", gap: spacing(3), borderWidth: 1, borderRadius: radii.lg, padding: spacing(3.5) },
+  iconWrap: { width: 32, height: 32, borderRadius: radii.md, alignItems: "center", justifyContent: "center" },
+  body: { flex: 1, gap: 2 },
 });
