@@ -14,6 +14,18 @@ const longDay = new Intl.DateTimeFormat("en-IN", { weekday: "long", day: "numeri
 
 export const formatToday = (date = new Date()) => longDay.format(date);
 
+/** "2026-09-15" (a calendar date) → "15 Sept", without a timezone shift. */
+export const formatDayLabel = (date: string) => shortDate.format(new Date(`${date}T00:00:00`));
+
+export function initialsOf(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
 export function formatRelativeTime(iso: string, now = Date.now()) {
   const seconds = Math.round((now - new Date(iso).getTime()) / 1000);
   if (seconds < 60) return "Just now";
