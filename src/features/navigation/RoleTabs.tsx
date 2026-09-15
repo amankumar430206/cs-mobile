@@ -22,6 +22,18 @@ export function AdvertiserTabs() {
         <NativeTabs.Trigger.Icon sf={{ default: "house", selected: "house.fill" }} md="home" />
         <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="campaigns">
+        <NativeTabs.Trigger.Icon sf={{ default: "megaphone", selected: "megaphone.fill" }} md="campaign" />
+        <NativeTabs.Trigger.Label>Campaigns</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="discover">
+        <NativeTabs.Trigger.Icon sf={{ default: "tv", selected: "tv.fill" }} md="tv" />
+        <NativeTabs.Trigger.Label>Discover</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="wallet">
+        <NativeTabs.Trigger.Icon sf={{ default: "indianrupeesign.circle", selected: "indianrupeesign.circle.fill" }} md="account_balance_wallet" />
+        <NativeTabs.Trigger.Label>Wallet</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
       <NativeTabs.Trigger name="account">
         <NativeTabs.Trigger.Icon sf={{ default: "person.crop.circle", selected: "person.crop.circle.fill" }} md="account_circle" />
         <NativeTabs.Trigger.Label>Account</NativeTabs.Trigger.Label>
