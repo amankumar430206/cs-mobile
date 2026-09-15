@@ -1,1 +1,1 @@
-export { RoleStack as default } from "@/features/navigation/RoleStack";
+export { RoleTabs as default } from "@/features/navigation/RoleTabs";
