@@ -1,13 +1,16 @@
 import type { CurrentUser } from "@castadi/shared/types";
+import type { AccountRoute } from "@/features/account/routes";
 
 export interface AttentionItem {
   key: string;
   title: string;
   description: string;
+  /** In-app destination that resolves the item, when there is one. */
+  action?: AccountRoute;
 }
 
 // Live "what still needs doing" list, mirroring cs-web's ActionableItemsCard plus a rejected-KYC
-// and awaiting-payment reminder. KYC and payments aren't in the app yet, so items point to the web.
+// and awaiting-payment reminder.
 export function buildAttentionItems(user: CurrentUser, campaignsAwaitingPayment = 0): AttentionItem[] {
   const items: AttentionItem[] = [];
   const isAdvertiser = user.role === "ADVERTISER";
@@ -19,14 +22,16 @@ export function buildAttentionItems(user: CurrentUser, campaignsAwaitingPayment 
       key: "kyc-pending",
       title: "Complete your KYC verification",
       description: isAdvertiser
-        ? "Have your business address, GST/PAN and ID documents ready, then submit from the CASTADI web dashboard."
-        : "Have your Aadhaar, PAN, bank details and ID documents ready, then submit from the CASTADI web dashboard.",
+        ? "Keep your business address, GST/PAN and registration documents handy."
+        : "Keep your Aadhaar, PAN, bank details and ID documents handy.",
+      action: "kyc",
     });
   } else if (kycStatus === "REJECTED") {
     items.push({
       key: "kyc-rejected",
       title: "Your KYC needs changes",
-      description: "Review the rejection reason and resubmit from the CASTADI web dashboard.",
+      description: "Review the reason and resubmit your details.",
+      action: "kyc",
     });
   } else if (kycStatus === "APPROVED" && profile && !profile.bank_account_number) {
     items.push({
@@ -35,6 +40,7 @@ export function buildAttentionItems(user: CurrentUser, campaignsAwaitingPayment 
       description: isAdvertiser
         ? "Needed for refunds — account number, IFSC code and account holder name."
         : "Needed to receive payouts — account number, IFSC code and account holder name.",
+      action: "bankDetails",
     });
   }
 

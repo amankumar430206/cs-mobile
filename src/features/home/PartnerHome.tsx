@@ -32,7 +32,7 @@ export function PartnerHome({ user }: { user: CurrentUser }) {
 
   return (
     <>
-      <AttentionList items={buildAttentionItems(user)} />
+      <AttentionList role={user.role} items={buildAttentionItems(user)} />
 
       <TrendHero
         title="Earnings"

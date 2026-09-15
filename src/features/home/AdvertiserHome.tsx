@@ -40,7 +40,7 @@ export function AdvertiserHome({ user }: { user: CurrentUser }) {
 
   return (
     <>
-      <AttentionList items={buildAttentionItems(user, awaitingPayment)} />
+      <AttentionList role={user.role} items={buildAttentionItems(user, awaitingPayment)} />
 
       <TrendHero
         title="Ad spend"
