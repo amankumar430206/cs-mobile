@@ -8,4 +8,9 @@ export const SCREEN_STATUS: Record<ScreenVerificationStatus, { label: string; to
   REJECTED: { label: "Rejected", tone: "danger" },
 };
 
+/** Photos can only be added, replaced or removed before review — same rule as cs-web's uploader. */
+export const canManageMedia = (status: ScreenVerificationStatus) => status === "PENDING" || status === "REJECTED";
+
 export const openScreenDetail = (id: string) => ({ pathname: "/partner/screens/[id]", params: { id } }) as const;
+export const editScreenRoute = (id: string) => ({ pathname: "/partner/screens/[id]/edit", params: { id } }) as const;
+export const screenMediaRoute = (id: string) => ({ pathname: "/partner/screens/[id]/media", params: { id } }) as const;

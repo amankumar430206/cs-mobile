@@ -11,13 +11,21 @@ import {
   usePhotosQuery,
 } from "@castadi/shared/hooks";
 import { radii, spacing } from "@castadi/shared/tokens";
-import { INSTALLATION_ENVIRONMENTS, INTERNET_TYPES, PHOTO_TYPES, REVENUE_MODELS, VIDEO_PHOTO_TYPE, type Screen as ScreenDto } from "@castadi/shared/types";
+import {
+  EDITABLE_SCREEN_STATUSES,
+  INSTALLATION_ENVIRONMENTS,
+  INTERNET_TYPES,
+  PHOTO_TYPES,
+  REVENUE_MODELS,
+  VIDEO_PHOTO_TYPE,
+  type Screen as ScreenDto,
+} from "@castadi/shared/types";
 import { formatINR } from "@/lib/format";
 import { toast } from "@/platform/toast";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Button, Card, DetailRow, Icon, LiveIndicator, Screen, Section, Skeleton, StatusPill, StatusView, Text } from "@/ui";
 import { DeviceCard } from "./DeviceCard";
-import { SCREEN_STATUS } from "./screenStatus";
+import { canManageMedia, editScreenRoute, SCREEN_STATUS, screenMediaRoute } from "./screenStatus";
 
 const labelOf = (options: readonly { value: string; label: string }[], value: string | null) =>
   value ? (options.find((option) => option.value === value)?.label ?? value) : null;
@@ -68,6 +76,8 @@ function ScreenDetail({ screen }: { screen: ScreenDto }) {
 
   const status = SCREEN_STATUS[screen.verificationStatus];
   const isActive = screen.verificationStatus === "ACTIVE";
+  const mediaEditable = canManageMedia(screen.verificationStatus);
+  const detailsEditable = EDITABLE_SCREEN_STATUSES.includes(screen.verificationStatus);
   const category = categories.data?.find((item) => item.id === screen.categoryId)?.label;
 
   const setListed = (next: boolean) => {
@@ -125,6 +135,19 @@ function ScreenDetail({ screen }: { screen: ScreenDto }) {
             Rejected: {screen.rejectionReason}
           </Text>
         ) : null}
+        {mediaEditable ? (
+          <Text variant="caption" tone="primary" weight="semibold">
+            Next: add photos and an installation video, then submit for review.
+          </Text>
+        ) : null}
+        {mediaEditable || detailsEditable ? (
+          <View style={styles.summaryActions}>
+            {mediaEditable ? <Button title="Add photos & submit" onPress={() => router.push(screenMediaRoute(screen.id))} /> : null}
+            {detailsEditable ? (
+              <Button title="Edit details" variant="secondary" onPress={() => router.push(editScreenRoute(screen.id))} />
+            ) : null}
+          </View>
+        ) : null}
       </Card>
 
       <PhotosSection screenId={screen.id} />
@@ -147,7 +170,12 @@ function ScreenDetail({ screen }: { screen: ScreenDto }) {
                   {screen.isListed ? "Advertisers can find and book this screen." : "Hidden from search and bookings."}
                 </Text>
               </View>
-              <ThemedSwitch value={screen.isListed} onChange={setListed} disabled={activate.isPending || deactivate.isPending} label="Visible to advertisers" />
+              <ThemedSwitch
+                value={screen.isListed}
+                onChange={setListed}
+                disabled={activate.isPending || deactivate.isPending}
+                label="Visible to advertisers"
+              />
             </View>
           </Card>
         </Section>
@@ -251,6 +279,7 @@ function ThemedSwitch({ value, onChange, disabled, label }: { value: boolean; on
 const styles = StyleSheet.create({
   content: { gap: spacing(5), paddingBottom: spacing(10) },
   summaryTop: { flexDirection: "row", alignItems: "center", gap: spacing(3) },
+  summaryActions: { gap: spacing(2), marginTop: spacing(1) },
   switchRow: { flexDirection: "row", alignItems: "center", gap: spacing(3) },
   switchText: { flex: 1, gap: 2 },
   photos: { gap: spacing(3) },

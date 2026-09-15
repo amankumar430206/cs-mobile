@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useMyScreensListQuery, usePartnerStatsQuery } from "@castadi/shared/hooks";
+import { useMeQuery, useMyScreensListQuery, usePartnerStatsQuery } from "@castadi/shared/hooks";
 import { radii, spacing } from "@castadi/shared/tokens";
 import type { ScreenVerificationStatus } from "@castadi/shared/types";
 import { useDebouncedValue } from "@/lib/useDebouncedValue";
@@ -24,9 +24,11 @@ const FILTERS: { value: Filter; label: string }[] = [
 
 export function MyScreensScreen() {
   const { colors } = useTheme();
+  const { data: user } = useMeQuery();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const debouncedSearch = useDebouncedValue(search.trim(), 300);
+  const kycApproved = user?.screenPartner?.kyc_status === "APPROVED";
 
   const filters = useMemo(
     () => ({
@@ -48,6 +50,8 @@ export function MyScreensScreen() {
     void stats.refetch();
   };
 
+  const registerNew = () => router.push(kycApproved ? "/partner/screens/new" : "/partner/account/kyc");
+
   return (
     <SafeAreaView edges={["top"]} style={[styles.fill, { backgroundColor: colors.background }]}>
       <FlatList
@@ -57,16 +61,24 @@ export function MyScreensScreen() {
         ItemSeparatorComponent={Gap}
         ListHeaderComponent={
           <View style={styles.header}>
-            <View>
-              <Text variant="title" accessibilityRole="header">
-                Screens
-              </Text>
-              <Text tone="muted">
-                {stats.data
-                  ? `${stats.data.activeScreens} active of ${stats.data.totalScreens} · ${stats.data.pendingScreens} pending review`
-                  : "Your registered screens"}
-              </Text>
+            <View style={styles.titleRow}>
+              <View style={styles.flex}>
+                <Text variant="title" accessibilityRole="header">
+                  Screens
+                </Text>
+                <Text tone="muted">
+                  {stats.data
+                    ? `${stats.data.activeScreens} active of ${stats.data.totalScreens} · ${stats.data.pendingScreens} pending review`
+                    : "Your registered screens"}
+                </Text>
+              </View>
+              <Button title="Register" style={styles.registerButton} onPress={registerNew} />
             </View>
+            {!kycApproved ? (
+              <Text variant="caption" tone="muted">
+                Complete your KYC verification before registering a screen.
+              </Text>
+            ) : null}
             <SearchField value={search} onChangeText={setSearch} placeholder="Search by name or city" />
             <FilterChips options={FILTERS} value={filter} onChange={setFilter} />
             {list.data && screens.length > 0 ? (
@@ -102,8 +114,9 @@ export function MyScreensScreen() {
             <Card>
               <Text variant="label">No screens yet</Text>
               <Text variant="caption" tone="muted">
-                Screens you register on the CASTADI web dashboard will show up here.
+                Register your screen with its location, photos and a short installation video, then submit it for review to start earning.
               </Text>
+              <Button title={kycApproved ? "Register your first screen" : "Complete KYC first"} onPress={registerNew} />
             </Card>
           )
         }
@@ -136,6 +149,9 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   content: { flexGrow: 1, padding: spacing(5), paddingBottom: spacing(10) },
   header: { gap: spacing(3), marginBottom: spacing(3) },
+  titleRow: { flexDirection: "row", alignItems: "center", gap: spacing(3) },
+  flex: { flex: 1 },
+  registerButton: { minHeight: 40, paddingHorizontal: spacing(4) },
   skeletons: { gap: spacing(2) },
   gap: { height: spacing(2) },
   footer: { paddingVertical: spacing(4) },
