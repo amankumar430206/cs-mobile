@@ -6,15 +6,23 @@ import { ApiClientError } from "@castadi/shared";
 import { useLoginMutation } from "@castadi/shared/hooks";
 import { loginSchema, type LoginFormValues } from "@castadi/shared/schemas";
 import { spacing } from "@castadi/shared/tokens";
-import { Button, Screen, Text, TextField } from "@/ui";
+import { Button, DevFillButton, Screen, Text, TextField } from "@/ui";
 import { AuthHeader } from "./AuthHeader";
 
 export function LoginScreen() {
   const login = useLoginMutation();
-  const { control, handleSubmit } = useForm<LoginFormValues>({
+  const { control, handleSubmit, reset } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { identifier: "", password: "" },
   });
+
+  // KYC-approved accounts from cs-api's seed (db/seeds/01_e2e_demo_data.js). Inside the
+  // __DEV__ guard so release bundles don't carry them.
+  const fillDemoLogin = (role: "ADVERTISER" | "SCREEN_PARTNER") => {
+    if (!__DEV__) return;
+    const identifier = role === "ADVERTISER" ? "adv.approved@demo.castadi.test" : "partner.approved@demo.castadi.test";
+    reset({ identifier, password: "Passw0rd!" });
+  };
 
   // On success the session is set and the root navigator's guard swaps to the app.
   const onSubmit = handleSubmit(async (values) => {
@@ -62,6 +70,13 @@ export function LoginScreen() {
 
       <Button title="Log in" loading={login.isPending} onPress={onSubmit} />
 
+      {__DEV__ ? (
+        <View style={styles.devFill}>
+          <DevFillButton title="Demo advertiser" onPress={() => fillDemoLogin("ADVERTISER")} />
+          <DevFillButton title="Demo partner" onPress={() => fillDemoLogin("SCREEN_PARTNER")} />
+        </View>
+      ) : null}
+
       <View style={styles.footer}>
         <Text tone="muted">New to CASTADI?</Text>
         <Link href="/register" asChild>
@@ -75,5 +90,6 @@ export function LoginScreen() {
 const styles = StyleSheet.create({
   content: { justifyContent: "center" },
   forgot: { alignSelf: "flex-end", minHeight: 40, paddingHorizontal: 0 },
+  devFill: { gap: spacing(2) },
   footer: { gap: spacing(2), marginTop: spacing(4), alignItems: "stretch" },
 });

@@ -2,6 +2,7 @@ export { Button } from "./Button";
 export { Card, DetailRow } from "./Card";
 export { CheckboxField } from "./CheckboxField";
 export { DateField } from "./DateField";
+export { DevFillButton } from "./DevFillButton";
 export { FieldMessage } from "./FieldMessage";
 export { PickerField, type PickerOption } from "./PickerField";
 export { Screen } from "./Screen";

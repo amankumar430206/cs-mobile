@@ -72,6 +72,25 @@ yarn start                                                  # then open the dev 
 ```
 Local alternative (needs Android Studio / Xcode): `npx expo run:android` or `npx expo run:ios`.
 
+## Dev test data
+
+Development builds (`__DEV__`) show dashed helper buttons — release builds strip them and their values:
+- **Login:** "Demo advertiser" / "Demo partner" fill the KYC-approved accounts from cs-api's seed
+  (`adv.approved@demo.castadi.test`, `partner.approved@demo.castadi.test`, password `Passw0rd!`). Run `yarn seed`
+  in cs-api first.
+- **Register:** "Fill test data" fills the current role's form (same values as cs-web) with a fresh email and mobile
+  number each time, so repeat registrations don't collide.
+
+## Brand assets
+
+App icon, Android adaptive icon layers, light/dark splash and the auth-screen wordmarks are generated from the
+master artwork in `../resources/logo`:
+```bash
+pip install Pillow
+python scripts/generate-brand-assets.py ..
+```
+Rebuild the native app (or restart Expo Go) to see icon/splash changes.
+
 ## Build variants
 
 `APP_VARIANT` (set per profile in `eas.json`) controls the app name, bundle id and deep-link scheme so all three can

@@ -9,7 +9,7 @@ import { onboardingSchema, type OnboardingFormValues } from "@castadi/shared/sch
 import { radii, spacing } from "@castadi/shared/tokens";
 import { PARTNER_TYPES } from "@castadi/shared/types";
 import { useTheme } from "@/theme/ThemeProvider";
-import { Button, CheckboxField, DateField, PickerField, Screen, Text, TextField } from "@/ui";
+import { Button, CheckboxField, DateField, DevFillButton, PickerField, Screen, Text, TextField } from "@/ui";
 import { AuthHeader } from "./AuthHeader";
 
 type Field = keyof OnboardingFormValues;
@@ -35,7 +35,7 @@ export function RegisterScreen() {
   const login = useLoginMutation();
   const checkAvailability = useCheckAvailabilityMutation();
 
-  const { control, handleSubmit, trigger, setValue, setError, getValues } = useForm<OnboardingFormValues>({
+  const { control, handleSubmit, trigger, setValue, setError, getValues, reset } = useForm<OnboardingFormValues>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
       role: "ADVERTISER",
@@ -55,6 +55,32 @@ export function RegisterScreen() {
     },
   });
   const role = useWatch({ control, name: "role" });
+
+  // Same values as cs-web's registration test fill. Kept inside the __DEV__ guard so release
+  // bundles drop them; email and mobile are unique per fill so repeat registrations don't 409.
+  const fillTestData = () => {
+    if (!__DEV__) return;
+    const stamp = String(Date.now());
+    const common = {
+      password: "Passw0rd!",
+      confirmPassword: "Passw0rd!",
+      referralCode: "",
+      acceptTerms: true,
+      email: `aman.vishwakarma.dev+m${stamp}@gmail.com`,
+      mobileNumber: `9${stamp.slice(-9)}`,
+    };
+    const roleValues =
+      role === "ADVERTISER"
+        ? { fullName: "Test Advertiser", contactPerson: "Asha Rao", businessName: "Bloom Retail Co" }
+        : {
+            fullName: "Test Partner",
+            dateOfBirth: "1988-06-12",
+            city: "Bengaluru",
+            state: "Karnataka",
+            partnerType: "AUTO_RICKSHAW_DRIVER",
+          };
+    reset({ ...getValues(), ...common, ...roleValues, role });
+  };
 
   const goNext = async () => {
     if (!(await trigger(STEP_FIELDS[step]))) return;
@@ -128,6 +154,9 @@ export function RegisterScreen() {
   return (
     <Screen edges={["bottom"]}>
       <AuthHeader title="Create your account" subtitle={`Step ${step + 1} of ${STEPS.length} · ${STEPS[step]}`} />
+      {__DEV__ ? (
+        <DevFillButton title={`Fill test data (${role === "ADVERTISER" ? "advertiser" : "partner"})`} onPress={fillTestData} />
+      ) : null}
 
       {step === 0 && (
         <View style={styles.roles} accessibilityRole="radiogroup">
