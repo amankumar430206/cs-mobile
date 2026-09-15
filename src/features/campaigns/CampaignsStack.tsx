@@ -14,6 +14,7 @@ export function CampaignsStack() {
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="new" options={{ title: "New campaign" }} />
       <Stack.Screen name="[id]" options={{ title: "Campaign" }} />
     </Stack>
   );

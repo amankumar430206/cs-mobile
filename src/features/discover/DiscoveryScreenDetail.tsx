@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FlatList, Image, StyleSheet, View } from "react-native";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useCategoriesQuery, useCreateBookingMutation, useMyCampaignsQuery, useScreenAvailabilityQuery, useScreenQuery } from "@castadi/shared/hooks";
 import { radii, spacing } from "@castadi/shared/tokens";
 import { formatINR } from "@/lib/format";
@@ -87,12 +87,11 @@ export function DiscoveryScreenDetail() {
         <DetailRow label="Environment" value={data.installationEnvironment === "OUTDOOR" ? "Outdoor" : data.installationEnvironment === "INDOOR" ? "Indoor" : undefined} />
         <DetailRow label="Daily footfall" value={data.dailyFootfall != null ? data.dailyFootfall.toLocaleString("en-IN") : undefined} />
         <DetailRow label="Est. daily impressions" value={data.estimatedDailyImpressions != null ? data.estimatedDailyImpressions.toLocaleString("en-IN") : undefined} />
-        <Button
-          title={eligible.length === 0 ? "No eligible campaign — create one on the web" : "Add to a campaign"}
-          onPress={() => setPickerOpen(true)}
-          disabled={eligible.length === 0 || createBooking.isPending}
-          loading={createBooking.isPending}
-        />
+        {eligible.length === 0 ? (
+          <Button title="Create a campaign first" variant="secondary" onPress={() => router.push("/advertiser/campaigns/new")} />
+        ) : (
+          <Button title="Add to a campaign" onPress={() => setPickerOpen(true)} disabled={createBooking.isPending} loading={createBooking.isPending} />
+        )}
       </Card>
 
       {availability.data && availability.data.entries.length > 0 ? (

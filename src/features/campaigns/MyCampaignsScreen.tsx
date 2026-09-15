@@ -52,9 +52,12 @@ export function MyCampaignsScreen() {
         ItemSeparatorComponent={Gap}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text variant="title" accessibilityRole="header">
-              Campaigns
-            </Text>
+            <View style={styles.titleRow}>
+              <Text variant="title" accessibilityRole="header" style={styles.flex}>
+                Campaigns
+              </Text>
+              <Button title="New" style={styles.newButton} onPress={() => router.push("/advertiser/campaigns/new")} />
+            </View>
             <SearchField value={search} onChangeText={setSearch} placeholder="Search campaigns" />
             <FilterChips options={FILTERS} value={filter} onChange={setFilter} />
             {list.data && campaigns.length > 0 ? (
@@ -89,8 +92,9 @@ export function MyCampaignsScreen() {
             <Card>
               <Text variant="label">No campaigns yet</Text>
               <Text variant="caption" tone="muted">
-                Create a campaign from the CASTADI web dashboard, then reserve screens for it from Discover here.
+                Create a campaign, then reserve screens for it from Discover.
               </Text>
+              <Button title="Create your first campaign" onPress={() => router.push("/advertiser/campaigns/new")} />
             </Card>
           )
         }
@@ -118,6 +122,9 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   content: { flexGrow: 1, padding: spacing(5), paddingBottom: spacing(10) },
   header: { gap: spacing(3), marginBottom: spacing(3) },
+  titleRow: { flexDirection: "row", alignItems: "center", gap: spacing(3) },
+  flex: { flex: 1 },
+  newButton: { minHeight: 40, paddingHorizontal: spacing(4) },
   skeletons: { gap: spacing(2) },
   gap: { height: spacing(2) },
   footer: { paddingVertical: spacing(4) },
