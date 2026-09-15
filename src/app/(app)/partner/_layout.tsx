@@ -1,1 +1,1 @@
-export { RoleTabs as default } from "@/features/navigation/RoleTabs";
+export { PartnerTabs as default } from "@/features/navigation/RoleTabs";

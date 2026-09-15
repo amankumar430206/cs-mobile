@@ -40,6 +40,18 @@ export default function AppLayout() {
       <Stack.Protected guard={role === "SCREEN_PARTNER"}>
         <Stack.Screen name="partner" />
       </Stack.Protected>
+      {/* Above the tab bars: Android caps native tabs at 5, so notifications opens from the Home bell instead. */}
+      <Stack.Screen
+        name="notifications"
+        options={{
+          headerShown: true,
+          title: "Notifications",
+          headerShadowVisible: false,
+          headerBackButtonDisplayMode: "minimal",
+          headerStyle: { backgroundColor: colors.background },
+          headerTintColor: colors.foreground,
+        }}
+      />
     </Stack>
   );
 }

@@ -1,4 +1,5 @@
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, View } from "react-native";
+import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   useMarkAllNotificationsReadMutation,
@@ -8,7 +9,7 @@ import {
 } from "@castadi/shared/hooks";
 import { spacing } from "@castadi/shared/tokens";
 import { useTheme } from "@/theme/ThemeProvider";
-import { Button, Text } from "@/ui";
+import { Text } from "@/ui";
 import { NotificationRow } from "./NotificationRow";
 
 export function NotificationsScreen() {
@@ -27,7 +28,26 @@ export function NotificationsScreen() {
   };
 
   return (
-    <SafeAreaView edges={["top"]} style={[styles.fill, { backgroundColor: colors.background }]}>
+    <SafeAreaView edges={["bottom"]} style={[styles.fill, { backgroundColor: colors.background }]}>
+      <Stack.Screen
+        options={{
+          headerRight:
+            unreadCount > 0
+              ? () => (
+                  <Pressable
+                    onPress={() => markAllRead.mutate()}
+                    disabled={markAllRead.isPending}
+                    hitSlop={12}
+                    accessibilityRole="button"
+                  >
+                    <Text variant="label" tone="primary" style={markAllRead.isPending && styles.dimmed}>
+                      Mark all read
+                    </Text>
+                  </Pressable>
+                )
+              : undefined,
+        }}
+      />
       <FlatList
         data={rows}
         keyExtractor={(notification) => notification.id}
@@ -40,22 +60,6 @@ export function NotificationsScreen() {
           />
         )}
         ItemSeparatorComponent={Separator}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Text variant="title" accessibilityRole="header">
-              Notifications
-            </Text>
-            {unreadCount > 0 ? (
-              <Button
-                title="Mark all read"
-                variant="ghost"
-                onPress={() => markAllRead.mutate()}
-                loading={markAllRead.isPending}
-                style={styles.markAll}
-              />
-            ) : null}
-          </View>
-        }
         ListEmptyComponent={
           list.isPending ? (
             <ActivityIndicator style={styles.empty} color={colors.primary} />
@@ -96,17 +100,9 @@ function Separator() {
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
-  content: { flexGrow: 1, paddingBottom: spacing(6) },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: spacing(5),
-    paddingTop: spacing(5),
-    paddingBottom: spacing(2),
-  },
-  markAll: { minHeight: 36, paddingHorizontal: spacing(2) },
+  content: { flexGrow: 1, paddingVertical: spacing(2) },
   separator: { height: StyleSheet.hairlineWidth, marginLeft: spacing(5) + 8 + spacing(3) },
   empty: { marginTop: spacing(16), gap: spacing(2), paddingHorizontal: spacing(5) },
   footer: { paddingVertical: spacing(4) },
+  dimmed: { opacity: 0.5 },
 });

@@ -1,1 +1,1 @@
-export { RoleTabs as default } from "@/features/navigation/RoleTabs";
+export { AdvertiserTabs as default } from "@/features/navigation/RoleTabs";

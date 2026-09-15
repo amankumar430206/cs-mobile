@@ -16,8 +16,8 @@ const GUTTER = spacing(5);
 
 export function HomeScreen() {
   const { data: user } = useMeQuery();
-  // Same query the tab badge polls, so this adds no extra requests.
-  const { data: unread } = useUnreadCountQuery();
+  // Drives the header bell badge; polling pauses automatically while the app is backgrounded.
+  const { data: unread } = useUnreadCountQuery({ refetchInterval: 60_000 });
   const queryClient = useQueryClient();
   const { mode } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
@@ -41,16 +41,18 @@ export function HomeScreen() {
 
   if (!user) return null;
 
-  const isAdvertiser = user.role === "ADVERTISER";
-  const openNotifications = () => router.navigate(isAdvertiser ? "/advertiser/notifications" : "/partner/notifications");
-
   return (
     <Screen edges={[]} onRefresh={refresh} refreshing={refreshing} contentStyle={styles.content}>
-      <DashboardHeader user={user} unreadCount={unread?.count ?? 0} onOpenNotifications={openNotifications} bleed={GUTTER} />
+      <DashboardHeader
+        user={user}
+        unreadCount={unread?.count ?? 0}
+        onOpenNotifications={() => router.push("/notifications")}
+        bleed={GUTTER}
+      />
 
-      {isAdvertiser ? <AdvertiserHome user={user} /> : <PartnerHome user={user} />}
+      {user.role === "ADVERTISER" ? <AdvertiserHome user={user} /> : <PartnerHome user={user} />}
 
-      <RecentNotifications role={user.role} />
+      <RecentNotifications />
     </Screen>
   );
 }

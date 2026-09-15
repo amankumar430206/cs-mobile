@@ -1,18 +1,19 @@
 import { StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { useMarkNotificationReadMutation, useNotificationsQuery } from "@castadi/shared/hooks";
-import type { UserRole } from "@castadi/shared/types";
 import { Card, Section, Text } from "@/ui";
 import { NotificationRow } from "./NotificationRow";
 
-export function RecentNotifications({ role }: { role: UserRole }) {
+export function RecentNotifications() {
   const { data, isPending } = useNotificationsQuery(1);
   const markRead = useMarkNotificationReadMutation();
   const recent = (data?.rows ?? []).slice(0, 3);
-  const viewAll = () => router.navigate(role === "SCREEN_PARTNER" ? "/partner/notifications" : "/advertiser/notifications");
 
   return (
-    <Section title="Notifications" action={recent.length > 0 ? { label: "View all", onPress: viewAll } : undefined}>
+    <Section
+      title="Notifications"
+      action={recent.length > 0 ? { label: "View all", onPress: () => router.push("/notifications") } : undefined}
+    >
       {isPending ? (
         <Text tone="muted">Loading notifications…</Text>
       ) : recent.length === 0 ? (
