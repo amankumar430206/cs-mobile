@@ -13,6 +13,7 @@ interface DateFieldProps<T extends FieldValues> {
   control: Control<T, any, any>;
   name: FieldPath<T>;
   label: string;
+  minimumDate?: Date;
   maximumDate?: Date;
   placeholder?: string;
 }
@@ -29,7 +30,7 @@ function fromDateString(value: unknown): Date | null {
 
 const displayFormat = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" });
 
-export function DateField<T extends FieldValues>({ control, name, label, maximumDate, placeholder = "Select a date" }: DateFieldProps<T>) {
+export function DateField<T extends FieldValues>({ control, name, label, minimumDate, maximumDate, placeholder = "Select a date" }: DateFieldProps<T>) {
   const { colors, mode } = useTheme();
   const [iosDraft, setIosDraft] = useState<Date | null>(null);
 
@@ -46,6 +47,7 @@ export function DateField<T extends FieldValues>({ control, name, label, maximum
             DateTimePickerAndroid.open({
               value: initial,
               mode: "date",
+              minimumDate,
               maximumDate,
               onChange: (event: DateTimePickerEvent, date?: Date) => {
                 if (event.type === "set" && date) field.onChange(toDateString(date));
@@ -81,6 +83,7 @@ export function DateField<T extends FieldValues>({ control, name, label, maximum
                       value={iosDraft ?? initial}
                       mode="date"
                       display="spinner"
+                      minimumDate={minimumDate}
                       maximumDate={maximumDate}
                       themeVariant={mode}
                       onChange={(_event: DateTimePickerEvent, date?: Date) => {
