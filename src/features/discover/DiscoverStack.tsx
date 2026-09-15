@@ -15,6 +15,7 @@ export function DiscoverStack() {
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="[id]" options={{ title: "Screen" }} />
+      <Stack.Screen name="reserve" options={{ title: "Reserve screen" }} />
     </Stack>
   );
 }

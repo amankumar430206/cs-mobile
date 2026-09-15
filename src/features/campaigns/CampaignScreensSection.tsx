@@ -67,6 +67,9 @@ export function CampaignScreensSection({ campaignId, canReserve }: { campaignId:
               </View>
               <Text variant="caption" tone="muted">
                 {formatINR(booking.totalAmount)}
+                {booking.status === "RESERVED" && booking.reservedUntil
+                  ? ` · held until ${new Date(booking.reservedUntil).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}`
+                  : ""}
               </Text>
               {booking.status === "RESERVED" || booking.status === "CONFIRMED" ? (
                 <Button

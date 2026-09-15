@@ -1,22 +1,17 @@
-import { useState } from "react";
 import { FlatList, Image, StyleSheet, View } from "react-native";
 import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useCategoriesQuery, useCreateBookingMutation, useMyCampaignsQuery, useScreenAvailabilityQuery, useScreenQuery } from "@castadi/shared/hooks";
+import { useCategoriesQuery, useScreenAvailabilityQuery, useScreenQuery } from "@castadi/shared/hooks";
 import { radii, spacing } from "@castadi/shared/tokens";
 import { formatINR } from "@/lib/format";
-import { toast } from "@/platform/toast";
 import { useTheme } from "@/theme/ThemeProvider";
-import { ActionSheet, Button, Card, DetailRow, LiveIndicator, Screen, Skeleton, StatusView, Text, type SheetAction } from "@/ui";
+import { Button, Card, DetailRow, LiveIndicator, Screen, Skeleton, StatusView, Text } from "@/ui";
 
 export function DiscoveryScreenDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const screen = useScreenQuery(id ?? "");
   const categories = useCategoriesQuery();
   const availability = useScreenAvailabilityQuery(id ?? "");
-  const campaigns = useMyCampaignsQuery();
-  const createBooking = useCreateBookingMutation();
   const { colors } = useTheme();
-  const [pickerOpen, setPickerOpen] = useState(false);
 
   if (screen.isError) {
     return (
@@ -36,25 +31,6 @@ export function DiscoveryScreenDetail() {
 
   const data = screen.data;
   const category = categories.data?.find((item) => item.id === data.categoryId)?.label ?? "Screen";
-  const eligible = (campaigns.data ?? []).filter((campaign) => campaign.status === "DRAFT" || campaign.status === "PENDING_PAYMENT");
-
-  const reserve = async (campaignId: string) => {
-    const campaign = eligible.find((item) => item.id === campaignId);
-    if (!campaign) return;
-    try {
-      await createBooking.mutateAsync({ campaignId, screenIds: [data.id], startDate: campaign.startDate, endDate: campaign.endDate });
-      toast.success(`Reserved for "${campaign.name}"`);
-    } catch {
-      // The API client already surfaced the error.
-    }
-  };
-
-  const campaignActions: SheetAction[] = eligible.map((campaign) => ({
-    key: campaign.id,
-    label: `${campaign.name} (${campaign.startDate.slice(0, 10)} – ${campaign.endDate.slice(0, 10)})`,
-    icon: "megaphone",
-    onPress: () => void reserve(campaign.id),
-  }));
 
   return (
     <Screen contentStyle={styles.content}>
@@ -87,11 +63,7 @@ export function DiscoveryScreenDetail() {
         <DetailRow label="Environment" value={data.installationEnvironment === "OUTDOOR" ? "Outdoor" : data.installationEnvironment === "INDOOR" ? "Indoor" : undefined} />
         <DetailRow label="Daily footfall" value={data.dailyFootfall != null ? data.dailyFootfall.toLocaleString("en-IN") : undefined} />
         <DetailRow label="Est. daily impressions" value={data.estimatedDailyImpressions != null ? data.estimatedDailyImpressions.toLocaleString("en-IN") : undefined} />
-        {eligible.length === 0 ? (
-          <Button title="Create a campaign first" variant="secondary" onPress={() => router.push("/advertiser/campaigns/new")} />
-        ) : (
-          <Button title="Add to a campaign" onPress={() => setPickerOpen(true)} disabled={createBooking.isPending} loading={createBooking.isPending} />
-        )}
+        <Button title="Reserve this screen" onPress={() => router.push({ pathname: "/advertiser/discover/reserve", params: { screenId: data.id } })} />
       </Card>
 
       {availability.data && availability.data.entries.length > 0 ? (
@@ -109,8 +81,6 @@ export function DiscoveryScreenDetail() {
           ))}
         </Card>
       ) : null}
-
-      <ActionSheet visible={pickerOpen} title="Choose a campaign" actions={campaignActions} onClose={() => setPickerOpen(false)} />
     </Screen>
   );
 }
