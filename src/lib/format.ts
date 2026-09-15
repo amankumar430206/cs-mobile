@@ -6,8 +6,28 @@ export function humanize(value: string) {
 
 const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 
+const inrPrecise = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 });
+
 // Postgres numeric columns can arrive as strings; coerce before formatting.
 export const formatINR = (amount: number | string) => inr.format(Number(amount) || 0);
+
+/** Paise-level amounts for wallets, payouts and settlements. */
+export const formatINRPrecise = (amount: number | string) => inrPrecise.format(Number(amount) || 0);
+
+const dateTime = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+
+export const formatDateTime = (iso: string) => dateTime.format(new Date(iso));
+
+export function formatDuration(totalSeconds: number) {
+  const seconds = Math.max(0, Math.round(totalSeconds));
+  if (seconds < 60) return `${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}m ${seconds % 60}s`;
+}
+
+export function formatStorage(megabytes: number) {
+  return megabytes >= 1024 ? `${(megabytes / 1024).toFixed(1)} GB` : `${megabytes} MB`;
+}
 
 const shortDate = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short" });
 const fullDate = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" });

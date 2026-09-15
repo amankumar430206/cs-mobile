@@ -27,6 +27,15 @@ const ICONS = {
   photo: { ios: "photo.fill", android: "image" },
   check: { ios: "checkmark.circle.fill", android: "check_circle" },
   logout: { ios: "rectangle.portrait.and.arrow.right", android: "logout" },
+  search: { ios: "magnifyingglass", android: "search" },
+  clear: { ios: "xmark.circle.fill", android: "cancel" },
+  wifi: { ios: "wifi", android: "wifi" },
+  wifiOff: { ios: "wifi.slash", android: "wifi_off" },
+  battery: { ios: "battery.75percent", android: "battery_5_bar" },
+  storage: { ios: "internaldrive", android: "storage" },
+  link: { ios: "link", android: "link" },
+  wallet: { ios: "wallet.pass.fill", android: "account_balance_wallet" },
+  video: { ios: "video.fill", android: "videocam" },
 } satisfies Record<string, { ios: SFSymbol; android: AndroidSymbol }>;
 
 export type IconName = keyof typeof ICONS;
