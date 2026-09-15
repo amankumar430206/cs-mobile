@@ -46,6 +46,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     "expo-status-bar",
     "@react-native-community/datetimepicker",
+    [
+      "expo-image-picker",
+      {
+        photosPermission: "CASTADI uses your photos to upload verification documents.",
+        cameraPermission: "CASTADI uses your camera to photograph verification documents.",
+        microphonePermission: false,
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
