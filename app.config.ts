@@ -25,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     package: `com.castadi.app${idSuffix}`,
     adaptiveIcon: {
-      backgroundColor: "#E6F4FE",
+      backgroundColor: "#FFFCF3",
       foregroundImage: "./assets/android-icon-foreground.png",
       backgroundImage: "./assets/android-icon-background.png",
       monochromeImage: "./assets/android-icon-monochrome.png",
@@ -40,8 +40,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       {
         image: "./assets/splash-icon.png",
         imageWidth: 160,
-        backgroundColor: "#ffffff",
-        dark: { backgroundColor: "#020617" },
+        backgroundColor: "#FFFCF3",
+        dark: { image: "./assets/splash-icon-dark.png", backgroundColor: "#111111" },
       },
     ],
     "expo-status-bar",
