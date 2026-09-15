@@ -6,7 +6,7 @@ import { FieldMessage } from "./FieldMessage";
 import { Text } from "./Text";
 
 interface CheckboxFieldProps<T extends FieldValues> {
-  control: Control<T>;
+  control: Control<T, any, any>;
   name: FieldPath<T>;
   label: string;
 }

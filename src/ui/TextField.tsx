@@ -7,7 +7,8 @@ import { FieldMessage } from "./FieldMessage";
 import { Text } from "./Text";
 
 interface TextFieldProps<T extends FieldValues> extends Omit<TextInputProps, "value" | "onChangeText" | "onBlur"> {
-  control: Control<T>;
+  // Any context/output type, so forms whose resolver transforms values (string inputs → numbers) can use it.
+  control: Control<T, any, any>;
   name: FieldPath<T>;
   label: string;
   hint?: string;

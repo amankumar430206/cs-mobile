@@ -9,27 +9,24 @@ import { Button } from "./Button";
 import { FieldMessage } from "./FieldMessage";
 import { Text } from "./Text";
 
-interface DateFieldProps<T extends FieldValues> {
+interface TimeFieldProps<T extends FieldValues> {
   control: Control<T, any, any>;
   name: FieldPath<T>;
   label: string;
-  maximumDate?: Date;
-  placeholder?: string;
 }
 
-// Values are calendar dates ("YYYY-MM-DD"), matching cs-api DATE columns — never a timezone-shifted ISO timestamp.
+// Values are 24-hour "HH:MM" strings, the format cs-api's operating-hours fields expect.
 const pad = (n: number) => String(n).padStart(2, "0");
-const toDateString = (date: Date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+const toTimeString = (date: Date) => `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 
-function fromDateString(value: unknown): Date | null {
-  if (typeof value !== "string") return null;
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : null;
+function fromTimeString(value: unknown): Date {
+  const date = new Date();
+  const match = typeof value === "string" ? /^(\d{2}):(\d{2})$/.exec(value) : null;
+  date.setHours(match ? Number(match[1]) : 9, match ? Number(match[2]) : 0, 0, 0);
+  return date;
 }
 
-const displayFormat = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" });
-
-export function DateField<T extends FieldValues>({ control, name, label, maximumDate, placeholder = "Select a date" }: DateFieldProps<T>) {
+export function TimeField<T extends FieldValues>({ control, name, label }: TimeFieldProps<T>) {
   const { colors, mode } = useTheme();
   const [iosDraft, setIosDraft] = useState<Date | null>(null);
 
@@ -38,22 +35,21 @@ export function DateField<T extends FieldValues>({ control, name, label, maximum
       control={control}
       name={name}
       render={({ field, fieldState }) => {
-        const current = fromDateString(field.value);
-        const initial = current ?? maximumDate ?? new Date();
+        const current = fromTimeString(field.value);
 
         const open = () => {
           if (Platform.OS === "android") {
             DateTimePickerAndroid.open({
-              value: initial,
-              mode: "date",
-              maximumDate,
+              value: current,
+              mode: "time",
+              is24Hour: true,
               onChange: (event: DateTimePickerEvent, date?: Date) => {
-                if (event.type === "set" && date) field.onChange(toDateString(date));
+                if (event.type === "set" && date) field.onChange(toTimeString(date));
                 field.onBlur();
               },
             });
           } else {
-            setIosDraft(initial);
+            setIosDraft(current);
           }
         };
 
@@ -63,13 +59,12 @@ export function DateField<T extends FieldValues>({ control, name, label, maximum
             <Pressable
               onPress={open}
               accessibilityRole="button"
-              accessibilityLabel={`${label}: ${current ? displayFormat.format(current) : placeholder}`}
-              style={[
-                styles.trigger,
-                { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: colors.card },
-              ]}
+              accessibilityLabel={`${label}: ${field.value || "not set"}`}
+              style={[styles.trigger, { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: colors.card }]}
             >
-              <Text tone={current ? "default" : "muted"}>{current ? displayFormat.format(current) : placeholder}</Text>
+              <Text tone={field.value ? "default" : "muted"} style={styles.value}>
+                {field.value || "Select a time"}
+              </Text>
             </Pressable>
             <FieldMessage error={fieldState.error?.message} />
 
@@ -78,10 +73,10 @@ export function DateField<T extends FieldValues>({ control, name, label, maximum
                 <View style={styles.backdrop}>
                   <SafeAreaView edges={["bottom"]} style={[styles.sheet, { backgroundColor: colors.card }]}>
                     <DateTimePicker
-                      value={iosDraft ?? initial}
-                      mode="date"
+                      value={iosDraft ?? current}
+                      mode="time"
                       display="spinner"
-                      maximumDate={maximumDate}
+                      locale="en-GB"
                       themeVariant={mode}
                       onChange={(_event: DateTimePickerEvent, date?: Date) => {
                         if (date) setIosDraft(date);
@@ -93,7 +88,7 @@ export function DateField<T extends FieldValues>({ control, name, label, maximum
                         title="Done"
                         style={styles.action}
                         onPress={() => {
-                          if (iosDraft) field.onChange(toDateString(iosDraft));
+                          if (iosDraft) field.onChange(toTimeString(iosDraft));
                           field.onBlur();
                           setIosDraft(null);
                         }}
@@ -111,14 +106,9 @@ export function DateField<T extends FieldValues>({ control, name, label, maximum
 }
 
 const styles = StyleSheet.create({
-  wrapper: { gap: spacing(1.5) },
-  trigger: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderRadius: radii.md,
-    paddingHorizontal: spacing(3),
-    justifyContent: "center",
-  },
+  wrapper: { gap: spacing(1.5), flex: 1 },
+  trigger: { minHeight: 48, borderWidth: 1, borderRadius: radii.md, paddingHorizontal: spacing(3), justifyContent: "center" },
+  value: { fontVariant: ["tabular-nums"] },
   backdrop: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.4)" },
   sheet: { borderTopLeftRadius: radii.xl, borderTopRightRadius: radii.xl, padding: spacing(4) },
   actions: { flexDirection: "row", gap: spacing(3) },

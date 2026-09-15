@@ -23,3 +23,4 @@ export { StatusPill } from "./StatusPill";
 export { LoadingView, StatusView } from "./StatusView";
 export { Text } from "./Text";
 export { TextField } from "./TextField";
+export { TimeField } from "./TimeField";

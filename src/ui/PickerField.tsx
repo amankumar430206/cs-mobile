@@ -14,7 +14,7 @@ export interface PickerOption {
 }
 
 interface PickerFieldProps<T extends FieldValues> {
-  control: Control<T>;
+  control: Control<T, any, any>;
   name: FieldPath<T>;
   label: string;
   options: readonly PickerOption[];
