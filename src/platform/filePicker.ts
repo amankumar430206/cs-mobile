@@ -39,6 +39,14 @@ export const VIDEO_LIMITS: PickLimits = {
   sizeMessage: "Video is too large (max 20 MB).",
 };
 
+// cs-api's creative upload accepts a wider mix, including MOV — an iPhone recording works here.
+export const CREATIVE_LIMITS: PickLimits = {
+  types: ["image/jpeg", "image/png", "image/gif", "video/mp4", "video/quicktime"],
+  maxBytes: 50 * 1024 * 1024,
+  typeMessage: "Only JPG, PNG, GIF, MP4 or MOV files are allowed.",
+  sizeMessage: "File is too large (max 50 MB).",
+};
+
 export class FilePickError extends Error {}
 
 function validate(file: PickedFile, limits: PickLimits): PickedFile {
