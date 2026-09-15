@@ -49,9 +49,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-image-picker",
       {
-        photosPermission: "CASTADI uses your photos to upload verification documents.",
-        cameraPermission: "CASTADI uses your camera to photograph verification documents.",
-        microphonePermission: false,
+        photosPermission: "CASTADI uses your photos to upload verification documents and screen photos.",
+        cameraPermission: "CASTADI uses your camera to photograph documents and your screens.",
+        microphonePermission: "CASTADI uses your microphone when you record a screen installation video.",
+      },
+    ],
+    [
+      "expo-location",
+      {
+        locationWhenInUsePermission: "CASTADI uses your location to pin where a screen is installed.",
       },
     ],
   ],
