@@ -10,6 +10,12 @@ const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR",
 export const formatINR = (amount: number | string) => inr.format(Number(amount) || 0);
 
 const shortDate = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short" });
+const fullDate = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" });
+
+export const formatDate = (iso: string) => fullDate.format(new Date(iso));
+
+/** "00011122233" → "•••• 2233" */
+export const maskAccountNumber = (value: string) => `•••• ${value.slice(-4)}`;
 const longDay = new Intl.DateTimeFormat("en-IN", { weekday: "long", day: "numeric", month: "long" });
 
 export const formatToday = (date = new Date()) => longDay.format(date);
