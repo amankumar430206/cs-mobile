@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   value: { flexShrink: 1, fontSize: 32, lineHeight: 38, fontWeight: "700", fontVariant: ["tabular-nums"] },
   axis: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   legend: { flexDirection: "row", alignItems: "center", gap: spacing(1.5) },
-  legendDot: { width: 8, height: 8, borderRadius: 2 },
+  legendDot: { width: 8, height: 8 },
   empty: {
     height: 84,
     borderWidth: 1,

@@ -42,6 +42,6 @@ export function DiscoveryScreenCard({ screen, categoryLabel, onPress }: { screen
 const styles = StyleSheet.create({
   card: { flex: 1, borderWidth: 1, borderRadius: radii.lg, overflow: "hidden" },
   cover: { aspectRatio: 16 / 10, justifyContent: "flex-start" },
-  liveBadge: { alignSelf: "flex-start", margin: spacing(2), borderRadius: radii.full, paddingHorizontal: spacing(2), paddingVertical: 3 },
+  liveBadge: { alignSelf: "flex-start", margin: spacing(2), borderRadius: radii.sm, paddingHorizontal: spacing(2), paddingVertical: 3 },
   body: { padding: spacing(3), gap: 2 },
 });

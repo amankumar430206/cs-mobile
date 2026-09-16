@@ -138,6 +138,6 @@ const styles = StyleSheet.create({
   initials: { color: brand.secondary },
   text: { flex: 1, gap: 2 },
   metaRow: { flexDirection: "row", alignItems: "center", gap: spacing(2), marginTop: spacing(1) },
-  rolePill: { borderRadius: radii.full, paddingHorizontal: spacing(2), paddingVertical: 2 },
+  rolePill: { borderRadius: radii.sm, paddingHorizontal: spacing(2), paddingVertical: 2 },
   business: { flexShrink: 1 },
 });

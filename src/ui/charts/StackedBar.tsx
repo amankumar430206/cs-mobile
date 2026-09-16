@@ -55,7 +55,7 @@ export function StackedBar({ segments, emptyLabel }: { segments: StackedSegment[
 
 const styles = StyleSheet.create({
   wrapper: { gap: spacing(3) },
-  bar: { flexDirection: "row", height: 10, borderRadius: radii.full, overflow: "hidden", gap: 2 },
+  bar: { flexDirection: "row", height: 10, borderRadius: radii.sm, overflow: "hidden", gap: 2 },
   legend: { flexDirection: "row", flexWrap: "wrap", columnGap: spacing(4), rowGap: spacing(2) },
   legendItem: { flexDirection: "row", alignItems: "center", gap: spacing(1.5) },
   dot: { width: 8, height: 8, borderRadius: 4 },

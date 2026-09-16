@@ -34,5 +34,5 @@ export function BarChart({ values, color, height = 96, highlightLast = 7, dimOpa
 
 const styles = StyleSheet.create({
   chart: { flexDirection: "row", alignItems: "flex-end", gap: 3 },
-  bar: { flex: 1, borderRadius: 3 },
+  bar: { flex: 1 },
 });
