@@ -109,6 +109,7 @@ For EAS builds, set `EXPO_PUBLIC_API_URL` in the EAS environment for each profil
 | Command | What it does |
 |---|---|
 | `yarn start` | Metro dev server (add `--go` for Expo Go, `--clear` to reset the cache) |
+| `yarn start:prod` | Metro against the production API in release JS mode (no dev tools or test fill); pass `--go`/`--tunnel` through, override the URL with `PROD_API_URL` |
 | `yarn android` / `yarn ios` | Start and open on an emulator / simulator |
 | `yarn typecheck` | `tsc --noEmit` |
 | `npx expo lint` | ESLint (eslint-config-expo) |
