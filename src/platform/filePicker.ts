@@ -54,7 +54,8 @@ export const CREATIVE_LIMITS: PickLimits = {
 
 export class FilePickError extends Error {}
 
-function validate(file: PickedFile, limits: PickLimits): PickedFile {
+/** Exported for tests; every picker below runs its result through this. */
+export function validatePickedFile(file: PickedFile, limits: PickLimits): PickedFile {
   if (!limits.types.includes(file.type)) throw new FilePickError(limits.typeMessage);
   if (file.size !== undefined && file.size > limits.maxBytes) throw new FilePickError(limits.sizeMessage);
   return file;
@@ -97,7 +98,7 @@ export async function takePhoto(limits: PickLimits = DOCUMENT_LIMITS): Promise<P
   await requireCamera();
   // quality < 1 re-encodes to JPEG, which also keeps typical phone photos under the 5 MB limit.
   const result = await ImagePicker.launchCameraAsync({ mediaTypes: ["images"], quality: 0.7 });
-  return result.canceled ? null : validate(fromImageAsset(result.assets[0]), limits);
+  return result.canceled ? null : validatePickedFile(fromImageAsset(result.assets[0]), limits);
 }
 
 export async function pickPhoto(limits: PickLimits = DOCUMENT_LIMITS): Promise<PickedFile | null> {
@@ -107,7 +108,7 @@ export async function pickPhoto(limits: PickLimits = DOCUMENT_LIMITS): Promise<P
     // iOS: hand back JPEG rather than HEIC, which cs-api doesn't accept.
     preferredAssetRepresentationMode: ImagePicker.UIImagePickerPreferredAssetRepresentationMode.Compatible,
   });
-  return result.canceled ? null : validate(fromImageAsset(result.assets[0]), limits);
+  return result.canceled ? null : validatePickedFile(fromImageAsset(result.assets[0]), limits);
 }
 
 export async function recordVideo(limits: PickLimits = VIDEO_LIMITS): Promise<PickedFile | null> {
@@ -117,7 +118,7 @@ export async function recordVideo(limits: PickLimits = VIDEO_LIMITS): Promise<Pi
     videoMaxDuration: 20,
     videoQuality: ImagePicker.UIImagePickerControllerQualityType.Medium,
   });
-  return result.canceled ? null : validate(fromVideoAsset(result.assets[0]), limits);
+  return result.canceled ? null : validatePickedFile(fromVideoAsset(result.assets[0]), limits);
 }
 
 export async function pickVideo(limits: PickLimits = VIDEO_LIMITS): Promise<PickedFile | null> {
@@ -125,12 +126,12 @@ export async function pickVideo(limits: PickLimits = VIDEO_LIMITS): Promise<Pick
     mediaTypes: ["videos"],
     preferredAssetRepresentationMode: ImagePicker.UIImagePickerPreferredAssetRepresentationMode.Compatible,
   });
-  return result.canceled ? null : validate(fromVideoAsset(result.assets[0]), limits);
+  return result.canceled ? null : validatePickedFile(fromVideoAsset(result.assets[0]), limits);
 }
 
 export async function pickFile(limits: PickLimits = DOCUMENT_LIMITS): Promise<PickedFile | null> {
   const result = await DocumentPicker.getDocumentAsync({ type: limits.types, copyToCacheDirectory: true });
   if (result.canceled) return null;
   const asset = result.assets[0];
-  return validate({ uri: asset.uri, name: asset.name, type: asset.mimeType ?? "application/octet-stream", size: asset.size }, limits);
+  return validatePickedFile({ uri: asset.uri, name: asset.name, type: asset.mimeType ?? "application/octet-stream", size: asset.size }, limits);
 }
