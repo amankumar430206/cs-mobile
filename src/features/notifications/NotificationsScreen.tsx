@@ -1,8 +1,9 @@
 import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, View } from "react-native";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   useMarkAllNotificationsReadMutation,
+  useMeQuery,
   useMarkNotificationReadMutation,
   useNotificationsInfiniteQuery,
   useUnreadCountQuery,
@@ -11,6 +12,7 @@ import { spacing } from "@castadi/shared/tokens";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Text } from "@/ui";
 import { NotificationRow } from "./NotificationRow";
+import { notificationRoute } from "./notificationRoute";
 
 export function NotificationsScreen() {
   const { colors } = useTheme();
@@ -18,6 +20,7 @@ export function NotificationsScreen() {
   const unread = useUnreadCountQuery();
   const markRead = useMarkNotificationReadMutation();
   const markAllRead = useMarkAllNotificationsReadMutation();
+  const me = useMeQuery();
 
   const rows = list.data?.pages.flatMap((page) => page.rows) ?? [];
   const unreadCount = unread.data?.count ?? 0;
@@ -56,6 +59,9 @@ export function NotificationsScreen() {
             notification={item}
             onPress={() => {
               if (item.status !== "READ") markRead.mutate(item.id);
+              // Open the related screen when the app has one; otherwise tapping just marks it read.
+              const target = me.data ? notificationRoute(item.link, me.data.role) : "/notifications";
+              if (target !== "/notifications") router.push(target);
             }}
           />
         )}
