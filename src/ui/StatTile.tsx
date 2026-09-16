@@ -39,7 +39,7 @@ export function StatTile({ label, value, hint, tone = "default", icon, loading =
     <View
       accessible
       accessibilityLabel={loading ? `${label}: loading` : `${label}: ${value}${hint ? `, ${hint}` : ""}`}
-      style={[styles.tile, { backgroundColor: colors.card, borderColor: colors.border }]}
+      style={[styles.tile, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}
     >
       <View style={styles.top}>
         {icon ? (
