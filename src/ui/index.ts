@@ -21,6 +21,7 @@ export { Section } from "./Section";
 export { Skeleton } from "./Skeleton";
 export { StatGrid, StatTile, toneToColor, type Tone } from "./StatTile";
 export { StatusPill } from "./StatusPill";
+export { Stepper } from "./Stepper";
 export { LoadingView, StatusView } from "./StatusView";
 export { Text } from "./Text";
 export { TextField } from "./TextField";
