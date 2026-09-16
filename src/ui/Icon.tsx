@@ -18,6 +18,7 @@ const ICONS = {
   play: { ios: "play.rectangle.fill", android: "smart_display" },
   location: { ios: "mappin.and.ellipse", android: "location_on" },
   chevronRight: { ios: "chevron.right", android: "chevron_right" },
+  arrowRight: { ios: "arrow.right", android: "arrow_forward" },
   person: { ios: "person.fill", android: "person" },
   lock: { ios: "lock.fill", android: "lock" },
   shield: { ios: "checkmark.shield.fill", android: "verified_user" },
