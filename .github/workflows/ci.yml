@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # cs-mobile installs @castadi/shared from ../cs-shared, so both repos sit side by side like on a dev machine.
+      - uses: actions/checkout@v4
+        with:
+          path: cs-mobile
+      - uses: actions/checkout@v4
+        with:
+          repository: amankumar430206/cs-shared
+          path: cs-shared
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+
+      - name: Install and build cs-shared
+        working-directory: cs-shared
+        run: yarn install --frozen-lockfile
+
+      - name: Install cs-mobile
+        working-directory: cs-mobile
+        run: yarn install --frozen-lockfile
+
+      - name: Typecheck
+        working-directory: cs-mobile
+        run: yarn typecheck
+
+      - name: Lint
+        working-directory: cs-mobile
+        run: yarn lint
+
+      - name: Unit tests
+        working-directory: cs-mobile
+        run: yarn test --ci
+
+      - name: Bundle size budget
+        working-directory: cs-mobile
+        run: yarn bundle:check
