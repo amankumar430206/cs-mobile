@@ -45,6 +45,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     "expo-status-bar",
+    // Push: tints the Android tray icon in brand orange and routes FCM messages to the channel cs-api sends on.
+    ["expo-notifications", { color: "#FF8A00", defaultChannel: "default" }],
     "@react-native-community/datetimepicker",
     [
       "expo-image-picker",
@@ -66,5 +68,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     variant,
+    // Expo push tokens are issued per EAS project. Set by `eas init` (or EAS_PROJECT_ID) — until then the app skips
+    // push registration instead of failing.
+    ...(process.env.EAS_PROJECT_ID ? { eas: { projectId: process.env.EAS_PROJECT_ID } } : {}),
   },
 });
