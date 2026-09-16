@@ -14,10 +14,11 @@ const env = {
 
 console.log(`start-production: API ${env.EXPO_PUBLIC_API_URL} — real accounts and data, demo logins won't work.`);
 
-const child = spawn("npx", ["expo", "start", "--no-dev", "--minify", "--clear", ...process.argv.slice(2)], {
+// Run Expo's CLI with this Node directly — no shell, so it behaves the same on Windows and macOS.
+const expoCli = require.resolve("expo/bin/cli");
+const child = spawn(process.execPath, [expoCli, "start", "--no-dev", "--minify", "--clear", ...process.argv.slice(2)], {
   env,
   stdio: "inherit",
-  shell: process.platform === "win32",
 });
 
 child.on("exit", (code) => process.exit(code ?? 0));
