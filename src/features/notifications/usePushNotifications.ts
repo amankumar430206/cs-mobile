@@ -52,3 +52,9 @@ export function usePushNotifications(role: UserRole) {
     };
   }, []);
 }
+
+/** Render-nothing mount point, so a layout can enable push after its role checks. */
+export function PushNotifications({ role }: { role: UserRole }) {
+  usePushNotifications(role);
+  return null;
+}
