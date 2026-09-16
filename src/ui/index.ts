@@ -9,6 +9,7 @@ export { DeltaBadge } from "./DeltaBadge";
 export { DevFillButton } from "./DevFillButton";
 export { FieldMessage } from "./FieldMessage";
 export { FilterChips } from "./FilterChips";
+export { useFieldBackground } from "./fieldSurface";
 export { Icon, type IconName } from "./Icon";
 export { ListItem } from "./ListItem";
 export { LiveIndicator } from "./LiveIndicator";
