@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Linking, StyleSheet, View } from "react-native";
-import { useCampaignCreativesQuery, useCreditRejectedCreativeToWalletMutation, useUploadCampaignBannerMutation } from "@castadi/shared/hooks";
+import { useCampaignCreativesQuery, useCreditRejectedCreativeToWalletMutation, useUploadCreativeMutation } from "@castadi/shared/hooks";
 import { radii, spacing } from "@castadi/shared/tokens";
 import type { Creative, CreativeStatus } from "@castadi/shared/types";
 import { CREATIVE_LIMITS, FilePickError, pickFile, pickPhoto, pickVideo, takePhoto, type PickedFile } from "@/platform/filePicker";
@@ -19,7 +19,10 @@ const MAX_CREATIVES = 5;
 export function CreativesSection({ campaignId, canUpload }: { campaignId: string; canUpload: boolean }) {
   const { colors } = useTheme();
   const creatives = useCampaignCreativesQuery(campaignId);
-  const upload = useUploadCampaignBannerMutation();
+  // Was useUploadCampaignBannerMutation — that posts to /campaigns/:id/banners
+  // (JPG/PNG/WEBP, 5 MB), so videos and larger files failed and accepted
+  // images became banners instead of reviewable creatives.
+  const upload = useUploadCreativeMutation(campaignId);
   const creditToWallet = useCreditRejectedCreativeToWalletMutation(campaignId);
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -36,7 +39,8 @@ export function CreativesSection({ campaignId, canUpload }: { campaignId: string
     }
     if (!file) return;
     try {
-      await upload.mutateAsync({ campaignId, file });
+      const { width, height, durationSeconds, ...uploadFile } = file;
+      await upload.mutateAsync({ file: uploadFile, width, height, durationSeconds });
       toast.success("Creative uploaded for review");
     } catch {
       // The API client already surfaced the error.

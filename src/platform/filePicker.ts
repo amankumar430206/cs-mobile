@@ -6,6 +6,11 @@ export interface PickedFile {
   name: string;
   type: string;
   size?: number;
+  /** Photo/video pixel size, when the picker reports it (not for document-picker files). */
+  width?: number;
+  height?: number;
+  /** Video length in seconds, when known. */
+  durationSeconds?: number;
 }
 
 export interface PickLimits {
@@ -58,13 +63,29 @@ function validate(file: PickedFile, limits: PickLimits): PickedFile {
 function fromImageAsset(asset: ImagePicker.ImagePickerAsset): PickedFile {
   const type = asset.mimeType ?? (asset.uri.toLowerCase().endsWith(".png") ? "image/png" : "image/jpeg");
   const extension = type === "image/png" ? "png" : "jpg";
-  return { uri: asset.uri, name: asset.fileName ?? `photo-${Date.now()}.${extension}`, type, size: asset.fileSize };
+  return {
+    uri: asset.uri,
+    name: asset.fileName ?? `photo-${Date.now()}.${extension}`,
+    type,
+    size: asset.fileSize,
+    width: asset.width || undefined,
+    height: asset.height || undefined,
+  };
 }
 
 function fromVideoAsset(asset: ImagePicker.ImagePickerAsset): PickedFile {
   const uri = asset.uri.toLowerCase();
   const type = asset.mimeType ?? (uri.endsWith(".mov") ? "video/quicktime" : "video/mp4");
-  return { uri: asset.uri, name: asset.fileName ?? `video-${Date.now()}.mp4`, type, size: asset.fileSize };
+  return {
+    uri: asset.uri,
+    name: asset.fileName ?? `video-${Date.now()}.mp4`,
+    type,
+    size: asset.fileSize,
+    width: asset.width || undefined,
+    height: asset.height || undefined,
+    // expo-image-picker reports video duration in milliseconds.
+    durationSeconds: asset.duration ? asset.duration / 1000 : undefined,
+  };
 }
 
 async function requireCamera() {
