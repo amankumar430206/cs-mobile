@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { radii, spacing, typography } from "@castadi/shared/tokens";
+import { fontFamily } from "@/theme/fonts";
 import { useTheme } from "@/theme/ThemeProvider";
 import { useFieldBackground } from "./fieldSurface";
 import { Icon } from "./Icon";
@@ -48,5 +49,5 @@ const styles = StyleSheet.create({
     borderRadius: radii.lg,
     paddingHorizontal: spacing(3),
   },
-  input: { flex: 1, fontSize: typography.sizes.base, paddingVertical: spacing(2.5) },
+  input: { flex: 1, fontSize: typography.sizes.base, fontFamily: fontFamily.normal, paddingVertical: spacing(2.5) },
 });

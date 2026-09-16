@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Pressable, StyleSheet, TextInput, View, type TextInputProps } from "react-native";
 import { Controller, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 import { radii, spacing, typography } from "@castadi/shared/tokens";
+import { fontFamily } from "@/theme/fonts";
 import { useTheme } from "@/theme/ThemeProvider";
 import { FieldMessage } from "./FieldMessage";
 import { useFieldBackground } from "./fieldSurface";
@@ -78,5 +79,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing(3),
     gap: spacing(2),
   },
-  input: { flex: 1, fontSize: typography.sizes.base, paddingVertical: spacing(3) },
+  input: { flex: 1, fontSize: typography.sizes.base, fontFamily: fontFamily.normal, paddingVertical: spacing(2.5) },
 });
