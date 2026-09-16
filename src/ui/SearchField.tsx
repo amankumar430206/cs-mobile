@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { radii, spacing, typography } from "@castadi/shared/tokens";
 import { useTheme } from "@/theme/ThemeProvider";
+import { useFieldBackground } from "./fieldSurface";
 import { Icon } from "./Icon";
 
 interface SearchFieldProps {
@@ -11,9 +12,10 @@ interface SearchFieldProps {
 
 export function SearchField({ value, onChangeText, placeholder }: SearchFieldProps) {
   const { colors } = useTheme();
+  const fieldBackground = useFieldBackground();
 
   return (
-    <View style={[styles.field, { backgroundColor: colors.card, borderColor: colors.border }]}>
+    <View style={[styles.field, { backgroundColor: fieldBackground, borderColor: colors.border }]}>
       <Icon name="search" size={16} color={colors.mutedForeground} />
       <TextInput
         value={value}

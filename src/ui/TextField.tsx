@@ -4,6 +4,7 @@ import { Controller, type Control, type FieldPath, type FieldValues } from "reac
 import { radii, spacing, typography } from "@castadi/shared/tokens";
 import { useTheme } from "@/theme/ThemeProvider";
 import { FieldMessage } from "./FieldMessage";
+import { useFieldBackground } from "./fieldSurface";
 import { Text } from "./Text";
 
 interface TextFieldProps<T extends FieldValues> extends Omit<TextInputProps, "value" | "onChangeText" | "onBlur"> {
@@ -18,6 +19,7 @@ interface TextFieldProps<T extends FieldValues> extends Omit<TextInputProps, "va
 
 export function TextField<T extends FieldValues>({ control, name, label, hint, secure, style, ...inputProps }: TextFieldProps<T>) {
   const { colors } = useTheme();
+  const fieldBackground = useFieldBackground();
   const [hidden, setHidden] = useState(!!secure);
 
   return (
@@ -30,7 +32,7 @@ export function TextField<T extends FieldValues>({ control, name, label, hint, s
           <View
             style={[
               styles.inputRow,
-              { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: colors.card },
+              { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: fieldBackground },
             ]}
           >
             <TextInput
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: "row",
     alignItems: "center",
-    minHeight: 48,
+    minHeight: 44,
     borderWidth: 1,
     borderRadius: radii.md,
     paddingHorizontal: spacing(3),

@@ -6,6 +6,7 @@ import { radii, spacing } from "@castadi/shared/tokens";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Button } from "./Button";
 import { FieldMessage } from "./FieldMessage";
+import { useFieldBackground } from "./fieldSurface";
 import { Text } from "./Text";
 
 export interface PickerOption {
@@ -23,6 +24,7 @@ interface PickerFieldProps<T extends FieldValues> {
 
 export function PickerField<T extends FieldValues>({ control, name, label, options, placeholder = "Select" }: PickerFieldProps<T>) {
   const { colors } = useTheme();
+  const fieldBackground = useFieldBackground();
   const [open, setOpen] = useState(false);
 
   return (
@@ -40,7 +42,7 @@ export function PickerField<T extends FieldValues>({ control, name, label, optio
               accessibilityLabel={`${label}: ${selected?.label ?? placeholder}`}
               style={[
                 styles.trigger,
-                { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: colors.card },
+                { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: fieldBackground },
               ]}
             >
               <Text tone={selected ? "default" : "muted"}>{selected?.label ?? placeholder}</Text>
@@ -89,7 +91,7 @@ export function PickerField<T extends FieldValues>({ control, name, label, optio
 const styles = StyleSheet.create({
   wrapper: { gap: spacing(1.5) },
   trigger: {
-    minHeight: 48,
+    minHeight: 44,
     borderWidth: 1,
     borderRadius: radii.md,
     paddingHorizontal: spacing(3),

@@ -7,6 +7,7 @@ import { radii, spacing } from "@castadi/shared/tokens";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Button } from "./Button";
 import { FieldMessage } from "./FieldMessage";
+import { useFieldBackground } from "./fieldSurface";
 import { Text } from "./Text";
 
 interface TimeFieldProps<T extends FieldValues> {
@@ -28,6 +29,7 @@ function fromTimeString(value: unknown): Date {
 
 export function TimeField<T extends FieldValues>({ control, name, label }: TimeFieldProps<T>) {
   const { colors, mode } = useTheme();
+  const fieldBackground = useFieldBackground();
   const [iosDraft, setIosDraft] = useState<Date | null>(null);
 
   return (
@@ -60,7 +62,7 @@ export function TimeField<T extends FieldValues>({ control, name, label }: TimeF
               onPress={open}
               accessibilityRole="button"
               accessibilityLabel={`${label}: ${field.value || "not set"}`}
-              style={[styles.trigger, { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: colors.card }]}
+              style={[styles.trigger, { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: fieldBackground }]}
             >
               <Text tone={field.value ? "default" : "muted"} style={styles.value}>
                 {field.value || "Select a time"}
@@ -107,7 +109,7 @@ export function TimeField<T extends FieldValues>({ control, name, label }: TimeF
 
 const styles = StyleSheet.create({
   wrapper: { gap: spacing(1.5), flex: 1 },
-  trigger: { minHeight: 48, borderWidth: 1, borderRadius: radii.md, paddingHorizontal: spacing(3), justifyContent: "center" },
+  trigger: { minHeight: 44, borderWidth: 1, borderRadius: radii.md, paddingHorizontal: spacing(3), justifyContent: "center" },
   value: { fontVariant: ["tabular-nums"] },
   backdrop: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.4)" },
   sheet: { borderTopLeftRadius: radii.xl, borderTopRightRadius: radii.xl, padding: spacing(4) },

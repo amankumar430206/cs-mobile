@@ -7,6 +7,7 @@ import { radii, spacing } from "@castadi/shared/tokens";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Button } from "./Button";
 import { FieldMessage } from "./FieldMessage";
+import { useFieldBackground } from "./fieldSurface";
 import { Text } from "./Text";
 
 interface DateFieldProps<T extends FieldValues> {
@@ -32,6 +33,7 @@ const displayFormat = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: 
 
 export function DateField<T extends FieldValues>({ control, name, label, minimumDate, maximumDate, placeholder = "Select a date" }: DateFieldProps<T>) {
   const { colors, mode } = useTheme();
+  const fieldBackground = useFieldBackground();
   const [iosDraft, setIosDraft] = useState<Date | null>(null);
 
   return (
@@ -68,7 +70,7 @@ export function DateField<T extends FieldValues>({ control, name, label, minimum
               accessibilityLabel={`${label}: ${current ? displayFormat.format(current) : placeholder}`}
               style={[
                 styles.trigger,
-                { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: colors.card },
+                { borderColor: fieldState.error ? colors.danger : colors.border, backgroundColor: fieldBackground },
               ]}
             >
               <Text tone={current ? "default" : "muted"}>{current ? displayFormat.format(current) : placeholder}</Text>
@@ -116,7 +118,7 @@ export function DateField<T extends FieldValues>({ control, name, label, minimum
 const styles = StyleSheet.create({
   wrapper: { gap: spacing(1.5) },
   trigger: {
-    minHeight: 48,
+    minHeight: 44,
     borderWidth: 1,
     borderRadius: radii.md,
     paddingHorizontal: spacing(3),
