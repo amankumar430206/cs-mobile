@@ -132,6 +132,9 @@ Every runtime dependency is here for a specific reason — keep it that way; jus
 | `@react-native-community/datetimepicker` | Native date picker |
 | `expo-constants`, `expo-application` | App config and version (sent as `X-App-Version`) |
 | `expo-splash-screen`, `expo-status-bar` | Splash until the session loads; status bar theming |
+| `expo-notifications` | Push notifications (tokens, foreground banners, tap handling) |
+| `expo-device` | Skips push registration on simulators/emulators |
+| `@expo-google-fonts/poppins` | cs-web's font (four weights as native assets) |
 | `expo-dev-client` | Development builds (not included in release builds) |
 
 Dev only: `typescript`, `eslint` (pinned to 9 — eslint-plugin-react breaks on 10), `eslint-config-expo`,
@@ -152,6 +155,19 @@ src/
 metro.config.js   strips zod's unused locale bundle (~245 KB)
 scripts/dedupe-shared.js   postinstall: removes cs-shared's nested node_modules so React loads once
 ```
+
+## Push notifications & app config
+
+- **Push** runs through Expo's push service, so cs-api needs no Firebase/APNs keys. The app registers its token after
+  sign-in (`POST /notifications/push-tokens`) and removes it on sign-out; tapping a push opens the matching screen.
+- **Push needs a development or release build on a real phone.** Expo Go on Android can't receive remote pushes, and
+  simulators never can — the app quietly skips registration there.
+- **One-time setup:** run `eas init` to link the project (or set `EAS_PROJECT_ID`); without a project id the app skips
+  push registration. Android also needs FCM credentials uploaded with `eas credentials`, and iOS an APNs key — EAS
+  prompts for both on the first build.
+- **App config:** on launch the app reads cs-api's public `GET /settings/app-config`. Maintenance mode or a version
+  below `minSupportedVersion` blocks the app; a newer `latestVersion` shows an update prompt. Admins change these with
+  `PUT /settings/app-config`. If the check fails, the app runs normally.
 
 ## Known limitations
 
