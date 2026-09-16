@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 2,
-    borderRadius: radii.full,
+    borderRadius: radii.sm,
     paddingHorizontal: spacing(2),
     paddingVertical: 2,
   },

@@ -20,5 +20,5 @@ export function StatusPill({ label, tone = "default" }: { label: string; tone?: 
 }
 
 const styles = StyleSheet.create({
-  pill: { alignSelf: "flex-start", borderRadius: radii.full, paddingHorizontal: spacing(2), paddingVertical: 2 },
+  pill: { alignSelf: "flex-start", borderRadius: radii.sm, paddingHorizontal: spacing(2), paddingVertical: 2 },
 });
