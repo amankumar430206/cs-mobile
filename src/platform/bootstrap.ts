@@ -1,6 +1,7 @@
 import * as SplashScreen from "expo-splash-screen";
 import { session } from "@castadi/shared";
 import { setupApiClient } from "./api";
+import { setupNotificationHandler } from "./push";
 import { setupReactQueryNative } from "./reactQueryNative";
 import { secureTokenStorage } from "./tokenStorage";
 
@@ -8,4 +9,5 @@ import { secureTokenStorage } from "./tokenStorage";
 void SplashScreen.preventAutoHideAsync();
 setupApiClient();
 setupReactQueryNative();
+setupNotificationHandler();
 void session.hydrate(secureTokenStorage);
