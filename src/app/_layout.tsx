@@ -14,7 +14,7 @@ import { fontAssets } from "@/theme/fonts";
 import { ThemeProvider, useTheme } from "@/theme/ThemeProvider";
 import { ToastHost } from "@/ui/ToastHost";
 
-export { ErrorBoundary } from "expo-router";
+export { CrashScreen as ErrorBoundary } from "@/features/brand/CrashScreen";
 
 export default function RootLayout() {
   const hydrated = useSession((s) => s.hydrated);
