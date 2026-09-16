@@ -23,7 +23,8 @@ import {
 } from "@/platform/filePicker";
 import { toast } from "@/platform/toast";
 import { useTheme } from "@/theme/ThemeProvider";
-import { ActionSheet, Button, Card, Icon, Screen, Skeleton, StatusPill, Text, type SheetAction } from "@/ui";
+import { ActionSheet, Button, Card, Icon, Screen, Skeleton, StatusPill, Stepper, Text, type SheetAction } from "@/ui";
+import { SCREEN_ONBOARDING_STEPS } from "./ScreenForm";
 import { canManageMedia } from "./screenStatus";
 
 interface Slot {
@@ -38,7 +39,7 @@ const SLOTS: Slot[] = [
 ];
 
 export function ScreenMediaScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, onboarding } = useLocalSearchParams<{ id: string; onboarding?: string }>();
   const screenId = id ?? "";
   const { colors } = useTheme();
   const screen = useMyScreenQuery(screenId);
@@ -57,6 +58,11 @@ export function ScreenMediaScreen() {
   const photosMet = stillCount >= requirements.minPhotos;
   const atMaxPhotos = stillCount >= requirements.maxPhotos;
   const editable = screen.data ? canManageMedia(screen.data.verificationStatus) : false;
+  // Arriving straight from registration: continue the same stepper at its last step until it's submitted.
+  const stepper =
+    onboarding === "1" && screen.data?.verificationStatus !== "UNDER_REVIEW" ? (
+      <Stepper steps={SCREEN_ONBOARDING_STEPS} current={SCREEN_ONBOARDING_STEPS.length - 1} />
+    ) : undefined;
 
   const uploadPicked = async (slot: Slot, pick: () => Promise<PickedFile | null>) => {
     let file: PickedFile | null;
@@ -131,7 +137,7 @@ export function ScreenMediaScreen() {
 
   if (photos.isPending || !screen.data) {
     return (
-      <Screen edges={["bottom"]} contentStyle={styles.content}>
+      <Screen edges={["bottom"]} contentStyle={styles.content} header={stepper}>
         <Skeleton height={60} radius={radii.lg} />
         <Skeleton height={360} radius={radii.lg} />
       </Screen>
@@ -139,7 +145,7 @@ export function ScreenMediaScreen() {
   }
 
   return (
-    <Screen edges={["bottom"]} contentStyle={styles.content}>
+    <Screen edges={["bottom"]} contentStyle={styles.content} header={stepper}>
       <Text tone="muted">
         Add at least {requirements.minPhotos} photos of the screen from different angles, plus a short video (10–20 seconds) showing it
         installed and running. This is how we confirm it&apos;s real before advertisers can book it.
