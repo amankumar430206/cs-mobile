@@ -1,7 +1,8 @@
 import { Stack } from "expo-router";
 import { useTheme } from "@/theme/ThemeProvider";
 
-export const unstable_settings = { initialRouteName: "login" };
+// Signed-out users land on the brand intro; its next arrow pushes login on top.
+export const unstable_settings = { initialRouteName: "welcome" };
 
 export default function AuthLayout() {
   const { colors } = useTheme();
@@ -17,6 +18,7 @@ export default function AuthLayout() {
         contentStyle: { backgroundColor: colors.background },
       }}
     >
+      <Stack.Screen name="welcome" options={{ headerShown: false, contentStyle: { backgroundColor: "#111111" } }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="register" />
       <Stack.Screen name="verify-otp" />
