@@ -15,6 +15,7 @@ import {
   EDITABLE_SCREEN_STATUSES,
   INSTALLATION_ENVIRONMENTS,
   INTERNET_TYPES,
+  orientationLabel,
   PHOTO_TYPES,
   REVENUE_MODELS,
   VIDEO_PHOTO_TYPE,
@@ -187,6 +188,7 @@ function ScreenDetail({ screen }: { screen: ScreenDto }) {
           <DetailRow label="Address" value={screen.installationAddress} />
           <DetailRow label="Screen size" value={screen.screenSize} />
           <DetailRow label="Resolution" value={screen.resolution} />
+          <DetailRow label="Orientation" value={orientationLabel(screen)} />
           <DetailRow label="Operating hours" value={`${screen.operatingHoursStart} – ${screen.operatingHoursEnd}`} />
           <DetailRow label="Internet" value={labelOf(INTERNET_TYPES, screen.internetType)} />
           <DetailRow label="Environment" value={labelOf(INSTALLATION_ENVIRONMENTS, screen.installationEnvironment)} />

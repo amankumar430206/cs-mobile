@@ -2,6 +2,7 @@ import { FlatList, Image, StyleSheet, View } from "react-native";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useCategoriesQuery, useScreenAvailabilityQuery, useScreenQuery } from "@castadi/shared/hooks";
 import { radii, spacing } from "@castadi/shared/tokens";
+import { orientationLabel } from "@castadi/shared/types";
 import { formatINR } from "@/lib/format";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Button, Card, DetailRow, LiveIndicator, Screen, Skeleton, StatusView, Text } from "@/ui";
@@ -56,6 +57,7 @@ export function DiscoveryScreenDetail() {
         </View>
         <Text tone="muted">
           {category} · {data.screenSize} · {data.resolution}
+          {orientationLabel(data) ? ` · ${orientationLabel(data)}` : ""}
         </Text>
         <DetailRow label="Price" value={`${formatINR(data.pricePerDay)}/day`} />
         <DetailRow label="Location" value={`${data.city}, ${data.state}`} />

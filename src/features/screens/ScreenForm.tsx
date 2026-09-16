@@ -9,8 +9,12 @@ import {
   INSTALLATION_ENVIRONMENTS,
   INTERNET_TYPES,
   REVENUE_MODELS,
+  SCREEN_ORIENTATIONS,
   SCREEN_SIZE_PRESETS,
+  orientResolution,
+  screenOrientationOf,
   type Screen,
+  type ScreenOrientation,
   type ScreenCategory,
 } from "@castadi/shared/types";
 import { toast } from "@/platform/toast";
@@ -25,7 +29,7 @@ const STEPS = ["Basics", "Location", "Pricing"] as const;
 /** The whole registration journey: the form's steps, then photos & video on the media screen. */
 export const SCREEN_ONBOARDING_STEPS = [...STEPS, "Media"] as const;
 const STEP_FIELDS: Field[][] = [
-  ["screenName", "categoryCode", "screenSize", "resolution", "installationEnvironment", "os", "deviceSerialNumber"],
+  ["screenName", "categoryCode", "screenSize", "resolution", "orientation", "installationEnvironment", "os", "deviceSerialNumber"],
   ["installationAddress", "city", "state", "gpsLatitude", "gpsLongitude", "locationUrl", "internetType", "operatingHoursStart", "operatingHoursEnd", "dailyFootfall"],
   ["ownershipDetails", "revenueModel", "pricePerDay", "estimatedDailyImpressions", "maxAdCapacity"],
 ];
@@ -41,6 +45,7 @@ function toDefaultValues(categories: ScreenCategory[], screen?: Screen): ScreenF
     categoryCode,
     screenSize: screen?.screenSize ?? "",
     resolution: screen?.resolution ?? "",
+    orientation: (screen ? screenOrientationOf(screen) : null) ?? "LANDSCAPE",
     os: screen?.os ?? "Android",
     deviceSerialNumber: screen?.deviceSerialNumber ?? "",
     installationAddress: screen?.installationAddress ?? "",
@@ -87,8 +92,12 @@ export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSu
     resolver: zodResolver(screenFormSchema),
     defaultValues: toDefaultValues(categories, screen),
   });
-  const [screenSize, resolution] = useWatch({ control, name: ["screenSize", "resolution"] });
-  const matchingPreset = SCREEN_SIZE_PRESETS.find((preset) => preset.screenSize === screenSize && preset.resolution === resolution);
+  const [screenSize, resolution, orientation] = useWatch({ control, name: ["screenSize", "resolution", "orientation"] });
+  const currentOrientation = (orientation ?? "LANDSCAPE") as ScreenOrientation;
+  // Presets are listed landscape; a portrait screen matches its rotated resolution.
+  const matchingPreset = SCREEN_SIZE_PRESETS.find(
+    (preset) => preset.screenSize === screenSize && orientResolution(preset.resolution, currentOrientation) === resolution
+  );
 
   const show = (index: number) => !isWizard || step === index;
 
@@ -112,6 +121,7 @@ export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSu
       categoryCode: categories.find((c) => c.code === "AUTO_RICKSHAW")?.code ?? categories[0]?.code ?? "",
       screenSize: "10 inch",
       resolution: "1280x720",
+      orientation: "LANDSCAPE",
       os: "Android",
       deviceSerialNumber: `TEST-DEV-${Date.now()}`,
       installationAddress: "12 MG Road, Bengaluru",
@@ -193,9 +203,23 @@ export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSu
                   const preset = SCREEN_SIZE_PRESETS.find((option) => option.value === value);
                   if (!preset) return;
                   setValue("screenSize", preset.screenSize, { shouldValidate: true });
-                  setValue("resolution", preset.resolution, { shouldValidate: true });
+                  setValue("resolution", orientResolution(preset.resolution, currentOrientation), { shouldValidate: true });
                 }}
               />
+            </View>
+            <View style={styles.fieldGroup}>
+              <Text variant="label">Orientation</Text>
+              <FilterChips
+                options={SCREEN_ORIENTATIONS.map((option) => ({ value: option.value, label: option.label }))}
+                value={currentOrientation}
+                onChange={(value) => {
+                  const next = value as ScreenOrientation;
+                  setValue("orientation", next, { shouldValidate: true });
+                  // Keep the resolution as-mounted: a portrait screen reads e.g. 1080x1920.
+                  setValue("resolution", orientResolution(getValues("resolution"), next), { shouldValidate: true });
+                }}
+              />
+              <Text tone="muted">How the screen is mounted — advertisers see this to check their ad fits.</Text>
             </View>
             <View style={styles.row}>
               <View style={styles.flex}>
