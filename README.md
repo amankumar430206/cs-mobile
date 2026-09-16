@@ -113,6 +113,8 @@ For EAS builds, set `EXPO_PUBLIC_API_URL` in the EAS environment for each profil
 | `yarn android` / `yarn ios` | Start and open on an emulator / simulator |
 | `yarn typecheck` | `tsc --noEmit` |
 | `npx expo lint` | ESLint (eslint-config-expo) |
+| `yarn test` | Unit tests (jest-expo); tests live next to the code in `__tests__/` |
+| `yarn bundle:check` | Production Android export; fails if the JS bundle exceeds the budget in `scripts/check-bundle-size.js` |
 | `yarn doctor` | expo-doctor project health checks |
 | `yarn shared:refresh` | Rebuild `../cs-shared` and reinstall it here — run after changing cs-shared |
 
@@ -137,7 +139,7 @@ Every runtime dependency is here for a specific reason — keep it that way; jus
 | `@expo-google-fonts/poppins` | cs-web's font (four weights as native assets) |
 | `expo-dev-client` | Development builds (not included in release builds) |
 
-Dev only: `typescript`, `eslint` (pinned to 9 — eslint-plugin-react breaks on 10), `eslint-config-expo`,
+Dev only: `jest`, `jest-expo`, `@react-native/jest-preset` (pinned to the installed React Native), `typescript`, `eslint` (pinned to 9 — eslint-plugin-react breaks on 10), `eslint-config-expo`,
 `expo-atlas` (bundle size analysis: `EXPO_ATLAS=true npx expo export --platform android`).
 
 ## Project structure
@@ -173,7 +175,9 @@ scripts/dedupe-shared.js   postinstall: removes cs-shared's nested node_modules 
 
 - **OTP verification and password reset** need a native MSG91 configuration that doesn't exist yet; those screens
   send users to the web app. With cs-api's `auth.otpBypass` feature flag on, registration logs straight in.
-- Sentry, automated tests and CI are not set up yet.
+- Sentry (crash reporting) isn't set up yet — it needs a Sentry project and DSN.
+- CI (`.github/workflows/ci.yml`) runs typecheck, lint, unit tests and the bundle budget; there are no end-to-end
+  (Maestro) tests yet.
 
 ## Troubleshooting
 
