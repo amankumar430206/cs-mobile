@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useSession } from "@castadi/shared";
+import { AppConfigGate } from "@/features/appConfig/AppConfigGate";
 import { BrandSplash } from "@/features/brand/BrandSplash";
 import { queryClient } from "@/platform/queryClient";
 import { fontAssets } from "@/theme/fonts";
@@ -34,7 +35,9 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
-          <RootNavigator />
+          <AppConfigGate>
+            <RootNavigator />
+          </AppConfigGate>
           <ToastHost />
           {/* The navigator mounts (and starts fetching) underneath the intro, so it never delays the app. */}
           {introDone ? null : <BrandSplash onFinish={finishIntro} />}
