@@ -32,10 +32,10 @@ export function FilterChips<T extends string>({ options, value, onChange }: Filt
               styles.chip,
               active
                 ? { backgroundColor: colors.primary, borderColor: colors.primary }
-                : { backgroundColor: colors.card, borderColor: colors.border },
+                : { backgroundColor: colors.muted, borderColor: colors.border },
             ]}
           >
-            <Text variant="caption" weight="semibold" style={{ color: active ? colors.primaryForeground : colors.mutedForeground }}>
+            <Text variant="caption" weight="medium" style={{ color: active ? colors.primaryForeground : colors.foreground }}>
               {option.label}
             </Text>
           </Pressable>
@@ -47,5 +47,5 @@ export function FilterChips<T extends string>({ options, value, onChange }: Filt
 
 const styles = StyleSheet.create({
   row: { gap: spacing(2), paddingVertical: 2 },
-  chip: { borderWidth: 1, borderRadius: radii.full, paddingHorizontal: spacing(3.5), paddingVertical: spacing(2), minHeight: 36, justifyContent: "center" },
+  chip: { borderWidth: 1, borderRadius: radii.sm, paddingHorizontal: spacing(3), paddingVertical: spacing(1.5), minHeight: 34, justifyContent: "center" },
 });
