@@ -16,7 +16,7 @@ export function CampaignRow({ campaign, onPress }: { campaign: Campaign; onPress
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${campaign.name}, ${status.label}`}
-      style={({ pressed }) => [styles.row, { backgroundColor: pressed ? colors.muted : colors.card, borderColor: colors.border }]}
+      style={({ pressed }) => [styles.row, { backgroundColor: pressed ? colors.muted : colors.card, borderColor: colors.cardBorder }]}
     >
       <View style={[styles.accent, { backgroundColor: toneToColor(colors, status.tone) }]} />
       <View style={[styles.iconWrap, { backgroundColor: colors.muted }]}>

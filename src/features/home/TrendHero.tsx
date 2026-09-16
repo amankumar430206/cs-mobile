@@ -27,7 +27,7 @@ export function TrendHero({ title, value, values, dates, delta, footer = [], loa
     (delta !== null ? `, ${delta >= 0 ? "up" : "down"} ${Math.abs(delta)} percent over the last 7 days` : "");
 
   return (
-    <View accessible accessibilityLabel={summary} style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+    <View accessible accessibilityLabel={summary} style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
       <View style={styles.top}>
         <Text variant="label" tone="muted">
           {title}

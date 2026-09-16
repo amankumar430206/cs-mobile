@@ -55,7 +55,7 @@ export function WalletScreen() {
             Top-ups, campaign payments and refunds will show up here.
           </Text>
         ) : (
-          <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
             {transactions.map((transaction, index) => {
               const amount = Number(transaction.amount);
               return (

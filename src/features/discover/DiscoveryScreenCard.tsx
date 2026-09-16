@@ -14,7 +14,7 @@ export function DiscoveryScreenCard({ screen, categoryLabel, onPress }: { screen
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${screen.screenName}, ${screen.city}, ${formatINR(screen.pricePerDay)} per day`}
-      style={({ pressed }) => [styles.card, { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.9 : 1 }]}
+      style={({ pressed }) => [styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder, opacity: pressed ? 0.9 : 1 }]}
     >
       <View style={[styles.cover, { backgroundColor: colors.muted }]}>
         {cover ? <Image source={{ uri: cover.downloadUrl }} style={StyleSheet.absoluteFill} /> : null}

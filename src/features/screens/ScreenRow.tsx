@@ -16,7 +16,7 @@ export function ScreenRow({ screen, onPress }: { screen: ScreenListItem; onPress
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${screen.screenName}, ${status.label}${isActive ? (screen.isLive ? ", live" : ", offline") : ""}`}
-      style={({ pressed }) => [styles.row, { backgroundColor: pressed ? colors.muted : colors.card, borderColor: colors.border }]}
+      style={({ pressed }) => [styles.row, { backgroundColor: pressed ? colors.muted : colors.card, borderColor: colors.cardBorder }]}
     >
       <View style={[styles.accent, { backgroundColor: toneToColor(colors, status.tone) }]} />
       <View style={[styles.iconWrap, { backgroundColor: colors.muted }]}>

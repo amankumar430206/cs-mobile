@@ -110,7 +110,7 @@ function DeviceHealthRow({ row }: { row: MyScreenHealth }) {
       onPress={() => router.push(openScreenDetail(row.screenId))}
       accessibilityRole="button"
       accessibilityLabel={`${row.screenName}, ${online ? "online" : "offline"}, health ${score} out of 100`}
-      style={({ pressed }) => [styles.row, { backgroundColor: pressed ? colors.muted : colors.card, borderColor: colors.border }]}
+      style={({ pressed }) => [styles.row, { backgroundColor: pressed ? colors.muted : colors.card, borderColor: colors.cardBorder }]}
     >
       <View style={styles.rowTop}>
         <View style={styles.flex}>

@@ -23,7 +23,7 @@ export function ToastHost() {
             accessibilityRole="alert"
             accessibilityLiveRegion="polite"
             accessibilityHint="Tap to dismiss"
-            style={[styles.toast, { backgroundColor: colors.card, borderColor: colors.border, borderLeftColor: accent }]}
+            style={[styles.toast, { backgroundColor: colors.card, borderColor: colors.cardBorder, borderLeftColor: accent }]}
           >
             {item.kind === "loading" && <ActivityIndicator size="small" color={accent} />}
             <Text variant="label" style={styles.message}>

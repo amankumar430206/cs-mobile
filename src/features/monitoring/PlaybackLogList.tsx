@@ -87,7 +87,7 @@ function PlaybackRow({ entry, screenName }: { entry: PlaybackLogEntry; screenNam
   const seconds = entry.endedAt ? (new Date(entry.endedAt).getTime() - new Date(entry.startedAt).getTime()) / 1000 : null;
 
   return (
-    <View style={[styles.row, { backgroundColor: colors.card, borderColor: colors.border }]}>
+    <View style={[styles.row, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
       <View style={styles.rowTop}>
         <Text variant="label" weight="semibold" numberOfLines={1} style={styles.flex}>
           {entry.campaignName ?? "Your own ad"}
