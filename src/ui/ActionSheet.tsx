@@ -60,7 +60,7 @@ export function ActionSheet({ visible, title, actions, onClose }: ActionSheetPro
               <Text>{action.label}</Text>
             </Pressable>
           ))}
-          <Button title="Cancel" variant="secondary" onPress={onClose} style={styles.cancel} />
+          <Button title="Cancel" variant="outline" onPress={onClose} style={styles.cancel} />
         </SafeAreaView>
       </View>
     </Modal>

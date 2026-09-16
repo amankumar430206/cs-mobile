@@ -83,7 +83,7 @@ export function TimeField<T extends FieldValues>({ control, name, label }: TimeF
                       }}
                     />
                     <View style={styles.actions}>
-                      <Button title="Cancel" variant="secondary" style={styles.action} onPress={() => setIosDraft(null)} />
+                      <Button title="Cancel" variant="outline" style={styles.action} onPress={() => setIosDraft(null)} />
                       <Button
                         title="Done"
                         style={styles.action}

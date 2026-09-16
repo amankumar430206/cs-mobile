@@ -118,7 +118,7 @@ function CreativeRow({
       <View style={styles.rowActions}>
         <Button title="View" variant="ghost" style={styles.action} onPress={() => void Linking.openURL(creative.downloadUrl)} />
         {creative.status === "REJECTED" && !creative.walletCreditedAt ? (
-          <Button title="Credit to wallet" variant="secondary" style={styles.action} onPress={onCredit} loading={crediting} />
+          <Button title="Credit to wallet" variant="outline" style={styles.action} onPress={onCredit} loading={crediting} />
         ) : creative.walletCreditedAt ? (
           <View style={styles.creditedRow}>
             <Icon name="check" size={14} color="#16a34a" />

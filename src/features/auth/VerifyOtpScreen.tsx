@@ -112,7 +112,7 @@ function VerifyOtpForm({ provider, userId, mobile }: { provider: OtpProvider; us
           <Button title="Verify" onPress={onSubmit} loading={formState.isSubmitting} />
           <Button
             title={cooldown > 0 ? `Resend code in ${cooldown}s` : "Resend code"}
-            variant="secondary"
+            variant="outline"
             onPress={send}
             loading={sending}
             disabled={cooldown > 0 || formState.isSubmitting}

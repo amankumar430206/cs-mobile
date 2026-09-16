@@ -7,7 +7,7 @@ import { Button } from "./Button";
  */
 export function DevFillButton({ onPress, title }: { onPress: () => void; title: string }) {
   if (!__DEV__) return null;
-  return <Button title={title} variant="secondary" onPress={onPress} style={styles.dashed} />;
+  return <Button title={title} variant="outline" onPress={onPress} style={styles.dashed} />;
 }
 
 const styles = StyleSheet.create({

@@ -81,7 +81,7 @@ export function MyCampaignsScreen() {
               </Text>
               <Button
                 title="Clear filters"
-                variant="secondary"
+                variant="outline"
                 onPress={() => {
                   setSearch("");
                   setFilter("all");

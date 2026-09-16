@@ -14,7 +14,7 @@ export default function AppLayout() {
     return (
       <StatusView title="Couldn't load your account" message="Check your connection and try again.">
         <Button title="Try again" onPress={() => me.refetch()} />
-        <Button title="Sign out" variant="secondary" onPress={() => void signOut()} />
+        <Button title="Sign out" variant="outline" onPress={() => void signOut()} />
       </StatusView>
     );
   }

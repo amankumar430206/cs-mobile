@@ -16,11 +16,11 @@ export function Pager({ page, limit, total, onPageChange }: PagerProps) {
 
   return (
     <View style={styles.row}>
-      <Button title="Previous" variant="secondary" style={styles.button} disabled={page <= 1} onPress={() => onPageChange(page - 1)} />
+      <Button title="Previous" variant="outline" style={styles.button} disabled={page <= 1} onPress={() => onPageChange(page - 1)} />
       <Text variant="caption" tone="muted">
         Page {page} of {pages}
       </Text>
-      <Button title="Next" variant="secondary" style={styles.button} disabled={page >= pages} onPress={() => onPageChange(page + 1)} />
+      <Button title="Next" variant="outline" style={styles.button} disabled={page >= pages} onPress={() => onPageChange(page + 1)} />
     </View>
   );
 }

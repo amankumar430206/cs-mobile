@@ -144,7 +144,7 @@ function ScreenDetail({ screen }: { screen: ScreenDto }) {
           <View style={styles.summaryActions}>
             {mediaEditable ? <Button title="Add photos & submit" onPress={() => router.push(screenMediaRoute(screen.id))} /> : null}
             {detailsEditable ? (
-              <Button title="Edit details" variant="secondary" onPress={() => router.push(editScreenRoute(screen.id))} />
+              <Button title="Edit details" variant="outline" onPress={() => router.push(editScreenRoute(screen.id))} />
             ) : null}
           </View>
         ) : null}
@@ -200,7 +200,7 @@ function ScreenDetail({ screen }: { screen: ScreenDto }) {
           <DetailRow label="Device serial" value={screen.deviceSerialNumber} />
         </Card>
         {screen.locationUrl ? (
-          <Button title="Open in maps" variant="secondary" onPress={() => void Linking.openURL(screen.locationUrl!)} />
+          <Button title="Open in maps" variant="outline" onPress={() => void Linking.openURL(screen.locationUrl!)} />
         ) : null}
       </Section>
 

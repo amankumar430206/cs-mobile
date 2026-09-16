@@ -17,7 +17,7 @@ export function EditScreenScreen() {
   if (screen.data && !EDITABLE_SCREEN_STATUSES.includes(screen.data.verificationStatus)) {
     return (
       <StatusView title="Can't edit right now" message="This screen is under review. You can edit it again once it's been decided.">
-        <Button title="Go back" variant="secondary" onPress={() => router.back()} />
+        <Button title="Go back" variant="outline" onPress={() => router.back()} />
       </StatusView>
     );
   }

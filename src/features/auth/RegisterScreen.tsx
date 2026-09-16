@@ -238,7 +238,7 @@ export function RegisterScreen() {
 
       <View style={styles.actions}>
         {step > 0 && (
-          <Button title="Back" variant="secondary" style={styles.action} onPress={() => setStep((current) => current - 1)} disabled={submitting} />
+          <Button title="Back" variant="outline" style={styles.action} onPress={() => setStep((current) => current - 1)} disabled={submitting} />
         )}
         {step < STEPS.length - 1 ? (
           <Button title="Continue" style={styles.action} onPress={goNext} loading={checkAvailability.isPending} />

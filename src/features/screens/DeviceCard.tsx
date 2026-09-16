@@ -68,7 +68,7 @@ export function DeviceCard({ screen }: { screen: Screen }) {
       <View style={styles.actions}>
         <Button title={hasConnected ? "Link a different device" : "Link device with code"} onPress={() => setLinking(true)} />
         {hasConnected ? (
-          <Button title="Disassociate device" variant="secondary" onPress={confirmRevoke} loading={revoke.isPending} />
+          <Button title="Disassociate device" variant="outline" onPress={confirmRevoke} loading={revoke.isPending} />
         ) : null}
       </View>
 

@@ -100,7 +100,7 @@ export function PaymentSection({ campaign }: { campaign: Campaign }) {
               disabled={!canPayFromWallet}
               loading={payFromWallet.isPending}
             />
-            <Button title="Raise payment request" variant="secondary" onPress={() => void raise()} loading={raiseRequest.isPending} />
+            <Button title="Raise payment request" variant="outline" onPress={() => void raise()} loading={raiseRequest.isPending} />
           </>
         ) : null}
       </Card>

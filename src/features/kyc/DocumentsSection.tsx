@@ -77,7 +77,7 @@ export function DocumentsSection({ documentTypes }: { documentTypes: DocumentTyp
                 ) : (
                   <Button
                     title="Upload"
-                    variant="secondary"
+                    variant="outline"
                     style={styles.action}
                     loading={uploading}
                     disabled={uploadingType !== null && !uploading}

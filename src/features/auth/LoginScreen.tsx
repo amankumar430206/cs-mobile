@@ -80,7 +80,7 @@ export function LoginScreen() {
       <View style={styles.footer}>
         <Text tone="muted">New to CASTADI?</Text>
         <Link href="/register" asChild>
-          <Button title="Create an account" variant="secondary" />
+          <Button title="Create an account" variant="outline" />
         </Link>
       </View>
     </Screen>

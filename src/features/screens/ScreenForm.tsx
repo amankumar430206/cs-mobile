@@ -213,7 +213,7 @@ export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSu
           <Card>
             <Button
               title={locating ? "Getting location…" : "Use my current location"}
-              variant="secondary"
+              variant="outline"
               loading={locating}
               onPress={() => void captureCurrentLocation()}
             />
@@ -291,7 +291,7 @@ export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSu
 
       <View style={styles.actions}>
         {isWizard && step > 0 ? (
-          <Button title="Back" variant="secondary" style={styles.flex} onPress={() => setStep((current) => current - 1)} disabled={isSubmitting} />
+          <Button title="Back" variant="outline" style={styles.flex} onPress={() => setStep((current) => current - 1)} disabled={isSubmitting} />
         ) : null}
         {isWizard && step < STEPS.length - 1 ? (
           <Button title="Continue" style={styles.flex} onPress={() => void goNext()} />

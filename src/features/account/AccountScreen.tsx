@@ -76,7 +76,7 @@ export function AccountScreen() {
       </Section>
 
       <View style={styles.footer}>
-        <Button title="Sign out" variant="secondary" onPress={() => void signOut()} />
+        <Button title="Sign out" variant="outline" onPress={() => void signOut()} />
         <Text variant="caption" tone="muted" align="center">
           CASTADI {env.appVersion}
         </Text>

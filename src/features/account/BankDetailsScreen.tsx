@@ -47,7 +47,7 @@ export function BankDetailsScreen() {
   if (!approved) {
     return (
       <StatusView title="Verification required" message="You can add bank details once your KYC is approved.">
-        <Button title="Go back" variant="secondary" onPress={() => router.back()} />
+        <Button title="Go back" variant="outline" onPress={() => router.back()} />
       </StatusView>
     );
   }

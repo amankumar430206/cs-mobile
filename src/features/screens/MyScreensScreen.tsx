@@ -103,7 +103,7 @@ export function MyScreensScreen() {
               </Text>
               <Button
                 title="Clear filters"
-                variant="secondary"
+                variant="outline"
                 onPress={() => {
                   setSearch("");
                   setFilter("all");
