@@ -21,6 +21,9 @@ type Field = keyof ScreenFormInput;
 
 // Same three steps and field grouping as cs-web's ScreenForm wizard; editing shows everything at once.
 const STEPS = ["Basics", "Location", "Pricing"] as const;
+
+/** The whole registration journey: the form's steps, then photos & video on the media screen. */
+export const SCREEN_ONBOARDING_STEPS = [...STEPS, "Media"] as const;
 const STEP_FIELDS: Field[][] = [
   ["screenName", "categoryCode", "screenSize", "resolution", "installationEnvironment", "os", "deviceSerialNumber"],
   ["installationAddress", "city", "state", "gpsLatitude", "gpsLongitude", "locationUrl", "internetType", "operatingHoursStart", "operatingHoursEnd", "dailyFootfall"],
@@ -65,11 +68,19 @@ interface ScreenFormProps {
   submitLabel: string;
   isSubmitting: boolean;
   onSubmit: (values: ScreenFormOutput) => void;
+  /** Controlled wizard step, so the caller can render a pinned Stepper. Falls back to internal state. */
+  step?: number;
+  onStepChange?: (step: number) => void;
 }
 
-export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSubmit }: ScreenFormProps) {
+export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSubmit, step: controlledStep, onStepChange }: ScreenFormProps) {
   const isWizard = !screen;
-  const [step, setStep] = useState(0);
+  const [internalStep, setInternalStep] = useState(0);
+  const step = controlledStep ?? internalStep;
+  const setStep = (next: number) => {
+    setInternalStep(next);
+    onStepChange?.(next);
+  };
   const [locating, setLocating] = useState(false);
 
   const { control, handleSubmit, trigger, setValue, getValues, reset } = useForm<ScreenFormInput, unknown, ScreenFormOutput>({
@@ -82,7 +93,7 @@ export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSu
   const show = (index: number) => !isWizard || step === index;
 
   const goNext = async () => {
-    if (await trigger(STEP_FIELDS[step])) setStep((current) => Math.min(current + 1, STEPS.length - 1));
+    if (await trigger(STEP_FIELDS[step])) setStep(Math.min(step + 1, STEPS.length - 1));
   };
 
   const onInvalid = (errors: FieldErrors<ScreenFormInput>) => {
@@ -156,7 +167,7 @@ export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSu
 
   return (
     <View style={styles.form}>
-      {isWizard ? (
+      {isWizard && controlledStep === undefined ? (
         <Text tone="muted">
           Step {step + 1} of {STEPS.length} · {STEPS[step]}
         </Text>
@@ -291,7 +302,7 @@ export function ScreenForm({ categories, screen, submitLabel, isSubmitting, onSu
 
       <View style={styles.actions}>
         {isWizard && step > 0 ? (
-          <Button title="Back" variant="outline" style={styles.flex} onPress={() => setStep((current) => current - 1)} disabled={isSubmitting} />
+          <Button title="Back" variant="outline" style={styles.flex} onPress={() => setStep(step - 1)} disabled={isSubmitting} />
         ) : null}
         {isWizard && step < STEPS.length - 1 ? (
           <Button title="Continue" style={styles.flex} onPress={() => void goNext()} />
