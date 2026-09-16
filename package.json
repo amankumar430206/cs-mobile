@@ -33,10 +33,13 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@react-native/jest-preset": "0.86.3",
     "@types/react": "~19.2.2",
     "eslint": "^9",
     "eslint-config-expo": "~57.0.2",
     "expo-atlas": "^0.4.0",
+    "jest": "~29.7.0",
+    "jest-expo": "~57.0.5",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -49,7 +52,18 @@
     "postinstall": "node scripts/dedupe-shared.js",
     "shared:refresh": "cd ../cs-shared && yarn build && cd ../cs-mobile && yarn add file:../cs-shared --force",
     "lint": "expo lint",
-    "bundle:check": "node scripts/check-bundle-size.js"
+    "bundle:check": "node scripts/check-bundle-size.js",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/.expo/"
+    ]
   },
   "private": true
 }
