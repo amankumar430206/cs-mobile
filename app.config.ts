@@ -38,10 +38,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        image: "./assets/splash-icon.png",
+        image: "./assets/splash-icon-dark.png",
         imageWidth: 160,
-        backgroundColor: "#FFFCF3",
-        dark: { image: "./assets/splash-icon-dark.png", backgroundColor: "#111111" },
+        // Dark brand stage in both modes, so the native splash hands off seamlessly to the in-app intro.
+        backgroundColor: "#111111",
       },
     ],
     "expo-status-bar",
