@@ -48,7 +48,8 @@
     "doctor": "expo-doctor",
     "postinstall": "node scripts/dedupe-shared.js",
     "shared:refresh": "cd ../cs-shared && yarn build && cd ../cs-mobile && yarn add file:../cs-shared --force",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "bundle:check": "node scripts/check-bundle-size.js"
   },
   "private": true
 }
