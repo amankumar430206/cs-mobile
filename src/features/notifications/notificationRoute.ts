@@ -6,7 +6,7 @@ import { openScreenDetail } from "@/features/screens/screenStatus";
 
 /**
  * cs-api notification links are cs-web paths (e.g. "/campaigns/<id>?tab=payments"). This maps the ones the app
- * has a screen for; anything else (support tickets, report downloads, admin pages) falls back to the inbox.
+ * has a screen for; anything else (report downloads, admin pages) falls back to the inbox.
  */
 export function notificationRoute(link: string | null | undefined, role: UserRole): Href {
   const fallback: Href = "/notifications";
