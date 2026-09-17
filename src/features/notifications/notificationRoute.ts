@@ -1,6 +1,6 @@
 import type { Href } from "expo-router";
 import type { UserRole } from "@castadi/shared/types";
-import { accountRoutes } from "@/features/account/routes";
+import { accountRoutes, ticketRoute } from "@/features/account/routes";
 import { openCampaignDetail } from "@/features/campaigns/campaignStatus";
 import { openScreenDetail } from "@/features/screens/screenStatus";
 
@@ -30,6 +30,9 @@ export function notificationRoute(link: string | null | undefined, role: UserRol
       return id ? openScreenDetail(id) : "/partner/screens";
     case "earnings":
       return isPartner ? "/partner/earnings" : fallback;
+    case "support":
+      // Replies on the user's own tickets; admin-side ticket links start with /admin and fall through to the inbox.
+      return id ? ticketRoute(role, id) : accountRoutes(role).support;
     case "wallet":
       return isPartner ? fallback : "/advertiser/wallet";
     default:

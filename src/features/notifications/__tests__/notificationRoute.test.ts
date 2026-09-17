@@ -23,6 +23,11 @@ describe("notificationRoute", () => {
     expect(notificationRoute("/dashboard", "ADVERTISER")).toBe("/advertiser");
   });
 
+  it("opens the user's own support ticket for their role", () => {
+    expect(notificationRoute("/support/t-1", "SCREEN_PARTNER")).toEqual({ pathname: "/partner/account/support/[id]", params: { id: "t-1" } });
+    expect(notificationRoute("/support/t-2", "ADVERTISER")).toEqual({ pathname: "/advertiser/account/support/[id]", params: { id: "t-2" } });
+  });
+
   it("never routes one role into the other role's screens", () => {
     expect(notificationRoute("/campaigns/abc", "SCREEN_PARTNER")).toBe("/notifications");
     expect(notificationRoute("/my-screens/s-1", "ADVERTISER")).toBe("/notifications");
@@ -32,6 +37,6 @@ describe("notificationRoute", () => {
   it("falls back to the inbox for missing, absolute and unknown links", () => {
     expect(notificationRoute(null, "ADVERTISER")).toBe("/notifications");
     expect(notificationRoute("https://bucket.example.com/report.csv", "ADVERTISER")).toBe("/notifications");
-    expect(notificationRoute("/support/t-1", "SCREEN_PARTNER")).toBe("/notifications");
+    expect(notificationRoute("/admin/support/t-1", "SCREEN_PARTNER")).toBe("/notifications");
   });
 });
