@@ -7,8 +7,8 @@ const PARTNER = {
   notificationSettings: "/partner/account/notification-settings",
   kyc: "/partner/account/kyc",
   bankDetails: "/partner/account/bank-details",
-  help: "/partner/account/help",
-  support: "/partner/account/support",
+  help: "/partner/account/help/index",
+  support: "/partner/account/support/index",
   newTicket: "/partner/account/support/new",
 } as const;
 
@@ -18,8 +18,8 @@ const ADVERTISER = {
   notificationSettings: "/advertiser/account/notification-settings",
   kyc: "/advertiser/account/kyc",
   bankDetails: "/advertiser/account/bank-details",
-  help: "/advertiser/account/help",
-  support: "/advertiser/account/support",
+  help: "/advertiser/account/help/index",
+  support: "/advertiser/account/support/index",
   newTicket: "/advertiser/account/support/new",
 } as const;
 
