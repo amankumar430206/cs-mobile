@@ -19,6 +19,11 @@ export function AccountStack() {
       <Stack.Screen name="notification-settings" options={{ title: "Notification settings" }} />
       <Stack.Screen name="kyc" options={{ title: "KYC & verification" }} />
       <Stack.Screen name="bank-details" options={{ title: "Bank details" }} />
+      <Stack.Screen name="help/index" options={{ title: "Help & support" }} />
+      <Stack.Screen name="help/[id]" options={{ title: "Help article" }} />
+      <Stack.Screen name="support/index" options={{ title: "My tickets" }} />
+      <Stack.Screen name="support/new" options={{ title: "New ticket" }} />
+      <Stack.Screen name="support/[id]" options={{ title: "Ticket" }} />
     </Stack>
   );
 }
