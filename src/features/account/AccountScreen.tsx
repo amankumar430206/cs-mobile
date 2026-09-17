@@ -75,6 +75,13 @@ export function AccountScreen() {
         </Card>
       </Section>
 
+      <Section title="Support">
+        <Card style={styles.menu}>
+          <ListItem icon="help" title="Help & support" subtitle="Guides, FAQs and contacting our team" onPress={() => router.push(routes.help)} />
+          <ListItem icon="chat" title="My tickets" onPress={() => router.push(routes.support)} divider />
+        </Card>
+      </Section>
+
       <View style={styles.footer}>
         <Button title="Sign out" variant="outline" onPress={() => void signOut()} />
         <Text variant="caption" tone="muted" align="center">
