@@ -7,6 +7,9 @@ const PARTNER = {
   notificationSettings: "/partner/account/notification-settings",
   kyc: "/partner/account/kyc",
   bankDetails: "/partner/account/bank-details",
+  help: "/partner/account/help",
+  support: "/partner/account/support",
+  newTicket: "/partner/account/support/new",
 } as const;
 
 const ADVERTISER = {
@@ -15,8 +18,21 @@ const ADVERTISER = {
   notificationSettings: "/advertiser/account/notification-settings",
   kyc: "/advertiser/account/kyc",
   bankDetails: "/advertiser/account/bank-details",
+  help: "/advertiser/account/help",
+  support: "/advertiser/account/support",
+  newTicket: "/advertiser/account/support/new",
 } as const;
 
 export type AccountRoute = keyof typeof PARTNER;
 
 export const accountRoutes = (role: UserRole) => (role === "SCREEN_PARTNER" ? PARTNER : ADVERTISER);
+
+export const ticketRoute = (role: UserRole, id: string) =>
+  role === "SCREEN_PARTNER"
+    ? ({ pathname: "/partner/account/support/[id]", params: { id } } as const)
+    : ({ pathname: "/advertiser/account/support/[id]", params: { id } } as const);
+
+export const articleRoute = (role: UserRole, id: string) =>
+  role === "SCREEN_PARTNER"
+    ? ({ pathname: "/partner/account/help/[id]", params: { id } } as const)
+    : ({ pathname: "/advertiser/account/help/[id]", params: { id } } as const);
